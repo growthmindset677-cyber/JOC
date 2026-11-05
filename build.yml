@@ -1,0 +1,2585 @@
+name: Build APK
+
+on:
+  workflow_dispatch:
+  push:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Generate project files
+        run: |
+          mkdir -p app/src/main/java/com/example/ordercopy
+          mkdir -p app/src/main/res/drawable
+          mkdir -p app/src/main/res/mipmap-anydpi-v26
+          mkdir -p app/src/main/res/mipmap-xxxhdpi
+
+          cat > settings.gradle <<'EOF'
+          pluginManagement {
+              repositories {
+                  google()
+                  mavenCentral()
+                  gradlePluginPortal()
+              }
+          }
+          dependencyResolutionManagement {
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
+          rootProject.name = "OrderCopy"
+          include ':app'
+          EOF
+
+          cat > build.gradle <<'EOF'
+          plugins {
+              id 'com.android.application' version '8.5.2' apply false
+          }
+          EOF
+
+          cat > gradle.properties <<'EOF'
+          android.useAndroidX=true
+          org.gradle.jvmargs=-Xmx2g
+          EOF
+
+          cat > app/build.gradle <<'EOF'
+          plugins {
+              id 'com.android.application'
+          }
+          android {
+              namespace 'com.example.ordercopy'
+              compileSdk 34
+              defaultConfig {
+                  applicationId 'com.example.ordercopy'
+                  minSdk 24
+                  targetSdk 34
+                  versionCode 5
+                  versionName '3.0'
+              }
+              compileOptions {
+                  sourceCompatibility JavaVersion.VERSION_17
+                  targetCompatibility JavaVersion.VERSION_17
+              }
+          }
+          dependencies {
+              implementation 'androidx.documentfile:documentfile:1.0.1'
+          }
+          EOF
+
+          cat > app/src/main/AndroidManifest.xml <<'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+              <application
+                  android:icon="@mipmap/ic_launcher"
+                  android:label="مُرتب كارت جوك"
+                  android:supportsRtl="true"
+                  android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
+                  <activity
+                      android:name=".MainActivity"
+                      android:exported="true">
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN" />
+                          <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+                  </activity>
+                  <activity
+                      android:name=".TableActivity"
+                      android:exported="false" />
+              </application>
+          </manifest>
+          EOF
+
+          cat > app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml <<'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+              <background android:drawable="@drawable/ic_bg" />
+              <foreground android:drawable="@drawable/ic_fg" />
+          </adaptive-icon>
+          EOF
+
+          cat > app/src/main/res/drawable/ic_bg.xml <<'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+              <gradient
+                  android:type="radial"
+                  android:centerX="0.5"
+                  android:centerY="0.52"
+                  android:gradientRadius="62%p"
+                  android:startColor="#338320"
+                  android:endColor="#01230B" />
+          </shape>
+          EOF
+
+          base64 -d > app/src/main/res/drawable/ic_fg.webp <<'EOF'
+          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
+          EOF
+
+          base64 -d > app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp <<'EOF'
+          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
+          EOF
+
+          cat > app/src/main/java/com/example/ordercopy/MainActivity.java <<'EOF'
+          package com.example.ordercopy;
+
+          import android.app.Activity;
+          import android.app.AlertDialog;
+          import android.content.Intent;
+          import android.content.res.ColorStateList;
+          import android.graphics.Typeface;
+          import android.graphics.drawable.Drawable;
+          import android.graphics.drawable.GradientDrawable;
+          import android.graphics.drawable.StateListDrawable;
+          import android.media.MediaMetadataRetriever;
+          import android.net.Uri;
+          import android.os.Bundle;
+          import android.os.Handler;
+          import android.os.Looper;
+          import android.provider.DocumentsContract;
+          import android.view.Gravity;
+          import android.view.View;
+          import android.view.ViewGroup;
+          import android.view.WindowManager;
+          import android.widget.Button;
+          import android.widget.FrameLayout;
+          import android.widget.ImageView;
+          import android.widget.LinearLayout;
+          import android.widget.ProgressBar;
+          import android.widget.ScrollView;
+          import android.widget.TextView;
+          import android.widget.Toast;
+
+          import androidx.documentfile.provider.DocumentFile;
+
+          import java.util.ArrayList;
+          import java.util.List;
+
+          public class MainActivity extends Activity {
+
+              static class Item {
+                  String name;
+                  DocumentFile file;
+                  boolean dir;
+              }
+
+              static class Ordered {
+                  List<Item> items = new ArrayList<>();
+                  int mode = Sorter.MODE_ALPHA;
+              }
+
+              private static final String TMP = "_ordertmp";
+              private static final String VERSION = "3.0";
+
+              private static final String INTRO =
+                      "يعمل راديو جوك (RadioJock) بنظام FAT32. يقرأ هذا النظام الملفات والمجلدات بحسب أقدمية دخول الملف إلى المجلد أو إلى سطح الكارت، بغض النظر عن اسم الملف أو رقمه، وليس بحسب أقدمية تحميل الملف من الإنترنت.";
+
+              private static final String EXAMPLE =
+                      "مثال توضيحي: إذا نقلت الملفات إلى المجلد أو إلى سطح الكارت بالترتيب التالي:\n"
+                              + "• 03 - آل عمران (أولاً)\n"
+                              + "• 01 - الفاتحة (ثانياً)\n"
+                              + "• 02 - البقرة (ثالثاً)\n\n"
+                              + "نتيجة التشغيل: سيشغّل الراديو الملفات بهذا الترتيب تماماً (3، ثم 1، ثم 2)، ولن يقرأها بترتيب الأرقام الصحيح.";
+
+              private static final String[] NOTES = {
+                      "١) يقرأ راديو جوك ملفات MP3 فقط، بجودة لا تزيد على 128kbps، ولا يقرأ ما زاد على ذلك.",
+                      "٢) يقرأ راديو جوك الملفات الموجودة على سطح الكارت (الجذر) أولاً، ثم الملفات الموجودة داخل المجلدات. فحتى لو كان رقم المجلد 01 ورقم الملف الذي على السطح 02، فسيقرأ الملف أولاً.",
+                      "٣) قد ينقل أندرويد وويندوز الملفات دون مراعاة ترتيبها، فيختل ترتيب الكارت حتى لو كان مرقَّماً. لذلك أعد استخدام تطبيق راديو جوك بعد كل نقل أو نسخ."
+              };
+
+              private static final String HOW_HEAD = "كيف يرتّب التطبيق الملفات؟";
+
+              private static final String HOW_INTRO =
+                      "يقوم تطبيق راديو جوك بتعديل وترتيب الملفات وفق الآلية التالية:\n\n"
+                              + "يقرأ التطبيق أسماء الملفات والمجلدات، ثم يُدخلها من جديد إلى المجلد نفسه بالترتيب الصحيح، فيتغيّر ترتيب دخولها ويتبعه الراديو. كل ذلك يتم داخل الكارت نفسه: لا نسخ ولا مساحة إضافية، ولا يتغيّر أي اسم أو محتوى أو مكان. تُرتَّب الملفات أولاً ثم المجلدات، ويُرتَّب كل مجلد فرعي مهما بلغ عمقه.\n\n"
+                              + "ويختار التطبيق طريقة الترتيب لكل مجلد على حدة، بحسب الأولويات التالية:";
+
+              private static final String[] P_TITLES = {
+                      "١) ترتيب المصحف",
+                      "٢) ترتيب الأرقام",
+                      "٣) ترتيب أسماء الأرقام",
+                      "٤) الترتيب الأبجدي"
+              };
+
+              private static final String[] P_BODIES = {
+                      "إذا كانت أغلب أسماء الملفات في المجلد (٦٠٪ فأكثر) أسماء سور مختلفة، رُتّبت من الفاتحة إلى الناس أينما ورد اسم السورة في الاسم، مثل: الفاتحة، سورة البقرة، 3 آل عمران، براءة. ولا يتأثر التعرّف بالتشكيل ولا بالهمزات ولا بالفرق بين (ة) و(ه) و(ى) و(ي). وإن تكررت السورة نفسها (مثل دروس متعددة لسورة واحدة) فلا يُعدّ المجلد مصحفاً، وينتقل التطبيق إلى الأرقام.",
+                      "يرتّب الأرقام من 1 إلى 9999 بقيمتها لا بشكلها: فـ 1 و01 و001 متساوية، و2 قبل 10. ويتعرف على الأرقام العربية (٢) والإنجليزية (2) والمختلطة (1، ٢، 3، ٤). ويجدها في أي موضع من الاسم: في البداية أو الوسط أو النهاية، مثل: سورة 2 البقرة، الدرس 10. وإذا وُجد في الاسم أكثر من رقم أُخذ أول رقم فيه.",
+                      "إذا لم يجد أرقاماً قرأ أسماء الأرقام بالحروف، عربية وإنجليزية، من الأولى إلى الثلاثمئة، في أي موضع من الاسم: الأولى، الثانية، التاسعة، العاشرة، الحادي عشر، الثاني عشر، الخامس والعشرون، One، Two، Three، Twenty-one. مثل: الحلقة الأولى، الحلقة الثانية. ولا يعتمدها إلا إذا وجد اسمين على الأقل من هذا النوع في المجلد.",
+                      "إذا لم يجد شيئاً مما سبق رتّب الأسماء أبجدياً (مع تجاهل «ال» التعريف والهمزات والتشكيل). وما لا رقم في اسمه يوضع بعد المرقّم."
+              };
+
+              private static final String USAGE =
+                      "طريقة الاستخدام: اختر مجلداً داخل الكارت (يمنع أندرويد اختيار جذر الكارت نفسه)، ثم اضغط «فحص ومعاينة» وراجع الترتيب، ثم اضغط «ابدأ». وإن توقفت العملية في المنتصف فأعد التشغيل على المجلد نفسه ليُكمل.";
+
+              private Uri rootUri;
+              private TextView tvRoot, tvStatus, tvLog;
+              private ProgressBar bar;
+              private Button btnStart;
+              private volatile boolean cancelled = false;
+              private final Handler ui = new Handler(Looper.getMainLooper());
+              private int dirsTotal, filesTotal, dirsDone, failures, dirsOrdered;
+              private final int[] modeCount = new int[3];
+
+              private static final int BG = 0xFF0F3D2E;
+              static final int CARD = 0xFF174C3A;
+              static final int GOLD = 0xFFD4AF37;
+              static final int CREAM = 0xFFF5F0E1;
+              static final int SOFT = 0xFFB9CFC4;
+              static final int MINT = 0xFF7ED6A8;
+              private static final int AMBER = 0xFFF2B35E;
+
+              private static final String DURATION_INFO =
+                      "اختر مجلد الكارت، وسيقرأ التطبيق مدة كل ملف صوتي ويعرض الإجمالي بالساعات والدقائق والثواني، مع تفصيل لكل مجلد فرعي. ثم يمكنك عرض جدول بمحتويات الكارت: المسلسل، والمجلد الرئيسي، والمجلدات الفرعية، وعدد الملفات، ورقم أول ملف، وإجمالي الوقت. وإن فعّلت «تفاصيل الملفات» ظهر اسم كل ملف ورقم تشغيله ومدته. ثم اطبع الجدول أو احفظه PDF. وأرقام التشغيل تتبع الترتيب الذي سيقرأ به الراديو الملفات.";
+
+              private LinearLayout orderPanel;
+              private LinearLayout durationPanel;
+              private DurationTool tool;
+              private Button tabOrder, tabDuration;
+              private float dens;
+
+              @Override
+              protected void onCreate(Bundle b) {
+                  super.onCreate(b);
+                  getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                  if (getActionBar() != null) getActionBar().hide();
+                  getWindow().setStatusBarColor(BG);
+                  getWindow().setNavigationBarColor(BG);
+                  dens = getResources().getDisplayMetrics().density;
+                  final float d = dens;
+                  int pad = (int) (14 * d);
+
+                  ScrollView sv = new ScrollView(this);
+                  sv.setBackgroundColor(BG);
+                  sv.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+                  LinearLayout root = new LinearLayout(this);
+                  root.setOrientation(LinearLayout.VERTICAL);
+                  root.setPadding(pad, (int) (24 * d), pad, pad);
+                  sv.addView(root);
+
+                  TextView title = text("مُرتب كارت جوك", 26, GOLD, true);
+                  title.setGravity(Gravity.CENTER);
+                  root.addView(title, new LinearLayout.LayoutParams(-1, -2));
+
+                  // ---------- الأزرار العاملة أولاً ----------
+                  LinearLayout tabs = new LinearLayout(this);
+                  tabs.setOrientation(LinearLayout.HORIZONTAL);
+                  tabOrder = tabButton("ترتيب الكارت");
+                  tabDuration = tabButton("حساب المدة والجدول");
+                  tabOrder.setOnClickListener(v -> selectTab(true));
+                  tabDuration.setOnClickListener(v -> selectTab(false));
+                  LinearLayout.LayoutParams t1 = new LinearLayout.LayoutParams(0, (int) (52 * d), 1f);
+                  LinearLayout.LayoutParams t2 = new LinearLayout.LayoutParams(0, (int) (52 * d), 1f);
+                  t1.setMargins((int) (4 * d), (int) (12 * d), (int) (4 * d), 0);
+                  t2.setMargins((int) (4 * d), (int) (12 * d), (int) (4 * d), 0);
+                  tabs.addView(tabOrder, t1);
+                  tabs.addView(tabDuration, t2);
+                  root.addView(tabs, new LinearLayout.LayoutParams(-1, -2));
+
+                  orderPanel = new LinearLayout(this);
+                  orderPanel.setOrientation(LinearLayout.VERTICAL);
+                  TextView usage = text(USAGE, 14, SOFT, false);
+                  usage.setLineSpacing(0f, 1.2f);
+                  usage.setPadding(0, (int) (10 * d), 0, 0);
+                  orderPanel.addView(usage);
+                  orderPanel.addView(makeButton("1) اختر الكارت أو المجلد", v -> pick()));
+                  tvRoot = text("لم يتم الاختيار", 15, SOFT, false);
+                  orderPanel.addView(tvRoot);
+                  orderPanel.addView(makeButton("2) فحص ومعاينة", v -> scan()));
+                  orderPanel.addView(makeButton("فحص توافق الملفات (اختياري)", v -> compat(), false));
+                  btnStart = makeButton("3) ابدأ إعادة الترتيب", v -> confirmStart());
+                  btnStart.setEnabled(false);
+                  orderPanel.addView(btnStart);
+                  orderPanel.addView(makeButton("إيقاف", v -> cancelled = true, false));
+                  bar = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
+                  bar.setProgressTintList(ColorStateList.valueOf(GOLD));
+                  orderPanel.addView(bar);
+                  tvStatus = text("", 15, CREAM, false);
+                  orderPanel.addView(tvStatus);
+                  tvLog = text("", 14, SOFT, false);
+                  orderPanel.addView(tvLog);
+                  root.addView(orderPanel, new LinearLayout.LayoutParams(-1, -2));
+
+                  tool = new DurationTool(this, ui, d);
+                  durationPanel = tool.build();
+                  root.addView(durationPanel, new LinearLayout.LayoutParams(-1, -2));
+                  selectTab(true);
+
+                  // ---------- ثم التعريف بالتطبيق ----------
+                  TextView introTitle = text("التعريف بالتطبيق", 20, GOLD, true);
+                  introTitle.setPadding(0, (int) (22 * d), 0, 0);
+                  root.addView(introTitle);
+
+                  LinearLayout c1 = card(pad, d);
+                  c1.addView(para(INTRO, 0));
+                  TextView ex = para(EXAMPLE, 0);
+                  ex.setBackground(shape(0xFF1F5E48, 12, 0));
+                  ex.setPadding(pad, pad, pad, pad);
+                  LinearLayout.LayoutParams elp = new LinearLayout.LayoutParams(-1, -2);
+                  elp.topMargin = pad / 2;
+                  c1.addView(ex, elp);
+
+                  TextView nh = text("ملاحظات", 18, AMBER, true);
+                  nh.setPadding(0, pad, 0, 0);
+                  c1.addView(nh);
+                  LinearLayout nb = new LinearLayout(this);
+                  nb.setOrientation(LinearLayout.VERTICAL);
+                  nb.setBackground(shape(0xFF4A3B14, 12, 0));
+                  nb.setPadding(pad, pad / 2, pad, pad);
+                  for (String n : NOTES) {
+                      TextView nt = text(n, 16, 0xFFF6E3A1, false);
+                      nt.setLineSpacing(0f, 1.25f);
+                      nt.setPadding(0, pad / 2, 0, 0);
+                      nb.addView(nt);
+                  }
+                  LinearLayout.LayoutParams nlp = new LinearLayout.LayoutParams(-1, -2);
+                  nlp.topMargin = pad / 3;
+                  c1.addView(nb, nlp);
+                  root.addView(c1);
+
+                  LinearLayout c2 = card(pad, d);
+                  c2.addView(text(HOW_HEAD, 20, GOLD, true));
+                  c2.addView(para(HOW_INTRO, pad / 2));
+                  for (int i = 0; i < P_TITLES.length; i++) {
+                      TextView pt = text(P_TITLES[i], 18, MINT, true);
+                      pt.setPadding(0, pad, 0, 0);
+                      c2.addView(pt);
+                      c2.addView(para(P_BODIES[i], pad / 4));
+                  }
+                  root.addView(c2);
+
+                  LinearLayout c3 = card(pad, d);
+                  c3.addView(text("حساب المدة والجدول", 20, GOLD, true));
+                  c3.addView(para(DURATION_INFO, pad / 2));
+                  TextView company = text("شركة هود للتكنولوجيا", 16, GOLD, true);
+                  company.setGravity(Gravity.CENTER);
+                  company.setPadding(0, pad, 0, 0);
+                  c3.addView(company);
+                  TextView ver = text("الإصدار " + VERSION, 13, SOFT, false);
+                  ver.setGravity(Gravity.CENTER);
+                  ver.setPadding(0, pad / 4, 0, 0);
+                  c3.addView(ver);
+                  root.addView(c3);
+
+                  setContentView(sv);
+              }
+
+              private Button tabButton(String t) {
+                  Button bt = new Button(this);
+                  bt.setText(t);
+                  bt.setAllCaps(false);
+                  bt.setTextSize(15);
+                  return bt;
+              }
+
+              private void styleTab(Button bt, boolean on) {
+                  bt.setBackground(on ? shape(GOLD, 14, 0) : shape(CARD, 14, GOLD));
+                  bt.setTextColor(on ? 0xFF1B2A22 : CREAM);
+              }
+
+              private void selectTab(boolean order) {
+                  styleTab(tabOrder, order);
+                  styleTab(tabDuration, !order);
+                  orderPanel.setVisibility(order ? View.VISIBLE : View.GONE);
+                  durationPanel.setVisibility(order ? View.GONE : View.VISIBLE);
+              }
+
+              static String ar(String s) {
+                  StringBuilder sb = new StringBuilder();
+                  for (int i = 0; i < s.length(); i++) {
+                      char c = s.charAt(i);
+                      if (c >= '0' && c <= '9') sb.append((char) ('\u0660' + (c - '0')));
+                      else sb.append(c);
+                  }
+                  return sb.toString();
+              }
+
+              GradientDrawable shape(int color, int rDp, int strokeColor) {
+                  GradientDrawable g = new GradientDrawable();
+                  g.setColor(color);
+                  g.setCornerRadius(rDp * dens);
+                  if (strokeColor != 0) g.setStroke((int) Math.max(1, dens), strokeColor);
+                  return g;
+              }
+
+              private LinearLayout card(int pad, float d) {
+                  LinearLayout c = new LinearLayout(this);
+                  c.setOrientation(LinearLayout.VERTICAL);
+                  c.setBackground(shape(CARD, 16, 0));
+                  c.setPadding(pad, pad, pad, pad);
+                  LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
+                  lp.topMargin = (int) (12 * d);
+                  c.setLayoutParams(lp);
+                  return c;
+              }
+
+              TextView text(String s, int sp, int color, boolean bold) {
+                  TextView t = new TextView(this);
+                  t.setText(s);
+                  t.setTextSize(sp);
+                  t.setTextColor(color);
+                  if (bold) t.setTypeface(null, Typeface.BOLD);
+                  return t;
+              }
+
+              private TextView para(String s, int topPad) {
+                  TextView t = text(s, 16, CREAM, false);
+                  t.setLineSpacing(0f, 1.25f);
+                  t.setPadding(0, topPad, 0, 0);
+                  return t;
+              }
+
+              Button makeButton(String text, View.OnClickListener l) {
+                  return makeButton(text, l, true);
+              }
+
+              Button makeButton(String text, View.OnClickListener l, boolean primary) {
+                  Button bt = new Button(this);
+                  bt.setText(text);
+                  bt.setAllCaps(false);
+                  bt.setTextSize(16);
+                  bt.setOnClickListener(l);
+                  StateListDrawable sl = new StateListDrawable();
+                  sl.addState(new int[]{-android.R.attr.state_enabled}, shape(0xFF3A5A4C, 14, 0));
+                  sl.addState(new int[]{}, primary ? shape(GOLD, 14, 0) : shape(CARD, 14, GOLD));
+                  bt.setBackground(sl);
+                  bt.setTextColor(new ColorStateList(
+                          new int[][]{new int[]{-android.R.attr.state_enabled}, new int[]{}},
+                          new int[]{0xFF8AA79B, primary ? 0xFF1B2A22 : GOLD}));
+                  LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, (int) (52 * dens));
+                  lp.topMargin = (int) (8 * dens);
+                  bt.setLayoutParams(lp);
+                  return bt;
+              }
+
+              private void pick() {
+                  startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), 1);
+              }
+
+              @Override
+              protected void onActivityResult(int req, int res, Intent data) {
+                  super.onActivityResult(req, res, data);
+                  if (res != RESULT_OK || data == null || data.getData() == null) return;
+                  if (req == 2) {
+                      tool.onPicked(data.getData());
+                      return;
+                  }
+                  rootUri = data.getData();
+                  DocumentFile f = DocumentFile.fromTreeUri(this, rootUri);
+                  String name = (f != null && f.getName() != null) ? f.getName() : rootUri.toString();
+                  tvRoot.setText("المختار: " + name);
+                  btnStart.setEnabled(false);
+              }
+
+              static boolean skip(String n) {
+                  String l = n.toLowerCase();
+                  return n.startsWith(".") || n.equals(TMP) || l.equals("android")
+                          || l.equals("lost.dir") || l.equals("system volume information")
+                          || l.equals("$recycle.bin");
+              }
+
+              // الملفات أولاً ثم المجلدات، وكل مجموعة تُرتَّب بحسب محتواها
+              Ordered order(DocumentFile dir) {
+                  List<Item> files = new ArrayList<>();
+                  List<Item> dirs = new ArrayList<>();
+                  for (DocumentFile f : dir.listFiles()) {
+                      String n = f.getName();
+                      if (n == null || skip(n)) continue;
+                      Item it = new Item();
+                      it.name = n;
+                      it.file = f;
+                      it.dir = f.isDirectory();
+                      if (it.dir) dirs.add(it);
+                      else files.add(it);
+                  }
+                  Sorter.Result rf = Sorter.sort(files);
+                  Sorter.Result rd = Sorter.sort(dirs);
+                  Ordered o = new Ordered();
+                  o.items.addAll(rf.items);
+                  o.items.addAll(rd.items);
+                  o.mode = files.isEmpty() ? rd.mode : rf.mode;
+                  return o;
+              }
+
+              private void scanDir(DocumentFile dir) {
+                  Ordered o = order(dir);
+                  if (o.items.size() >= 2) modeCount[o.mode]++;
+                  for (Item it : o.items) {
+                      if (it.dir) {
+                          dirsTotal++;
+                          scanDir(it.file);
+                      } else {
+                          filesTotal++;
+                      }
+                  }
+              }
+
+              private String modesLine() {
+                  return "طرق الترتيب: مصحف " + modeCount[Sorter.MODE_QURAN]
+                          + " | أرقام " + modeCount[Sorter.MODE_NUMBERS]
+                          + " | أبجدي " + modeCount[Sorter.MODE_ALPHA];
+              }
+
+              private void scan() {
+                  if (rootUri == null) {
+                      Toast.makeText(this, "اختر الكارت أو المجلد أولاً", Toast.LENGTH_LONG).show();
+                      return;
+                  }
+                  tvLog.setText("");
+                  tvStatus.setText("جارٍ الفحص...");
+                  new Thread(() -> {
+                      try {
+                          DocumentFile r = DocumentFile.fromTreeUri(this, rootUri);
+                          dirsTotal = 1;
+                          filesTotal = 0;
+                          modeCount[0] = 0;
+                          modeCount[1] = 0;
+                          modeCount[2] = 0;
+                          scanDir(r);
+                          Ordered top = order(r);
+                          StringBuilder sb = new StringBuilder("طريقة الترتيب في هذا المجلد: ");
+                          sb.append(Sorter.modeName(top.mode)).append("\nالترتيب الذي سيُطبَّق:\n");
+                          int n = Math.min(top.items.size(), 40);
+                          for (int i = 0; i < n; i++) {
+                              sb.append(i + 1).append(". ");
+                              if (top.items.get(i).dir) sb.append("[مجلد] ");
+                              sb.append(top.items.get(i).name).append("\n");
+                          }
+                          if (top.items.size() > n) sb.append("... و").append(top.items.size() - n).append(" أخرى\n");
+                          final String preview = sb.toString();
+                          final String st = "مجلدات: " + dirsTotal + " | ملفات: " + filesTotal + "\n" + modesLine();
+                          ui.post(() -> {
+                              tvStatus.setText(st);
+                              tvLog.setText(preview);
+                              btnStart.setEnabled(true);
+                          });
+                      } catch (Exception e) {
+                          ui.post(() -> tvStatus.setText("خطأ: " + e.getMessage()));
+                      }
+                  }).start();
+              }
+
+              private void confirmStart() {
+                  new AlertDialog.Builder(this)
+                          .setTitle("تأكيد البدء")
+                          .setMessage("سيُنقل محتوى كل مجلد مؤقتاً داخل الكارت ثم يُعاد بالترتيب الجديد. لا تسحب الكارت ولا تُغلق التطبيق حتى تظهر كلمة «اكتمل».")
+                          .setPositiveButton("ابدأ", (dlg, w) -> start())
+                          .setNegativeButton("إلغاء", null)
+                          .show();
+              }
+
+              private int cNonMp3, cHigh, cUnreadable, cMp3;
+              private final List<String> cLines = new ArrayList<>();
+
+              private void addCompatLine(String s) {
+                  synchronized (cLines) {
+                      cLines.add(s);
+                  }
+              }
+
+              private void compatWalk(DocumentFile dir, String path, MediaMetadataRetriever mmr) {
+                  for (DocumentFile f : dir.listFiles()) {
+                      if (cancelled) return;
+                      String n = f.getName();
+                      if (n == null || skip(n)) continue;
+                      if (f.isDirectory()) {
+                          compatWalk(f, path + n + "/", mmr);
+                          continue;
+                      }
+                      if (!n.toLowerCase().endsWith(".mp3")) {
+                          cNonMp3++;
+                          addCompatLine("[ليس MP3] " + path + n);
+                          continue;
+                      }
+                      cMp3++;
+                      try {
+                          mmr.setDataSource(this, f.getUri());
+                          String br = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
+                          if (br == null) {
+                              cUnreadable++;
+                              addCompatLine("[تعذّرت قراءة الجودة] " + path + n);
+                          } else {
+                              long bps = Long.parseLong(br);
+                              if (bps > 130000L) {
+                                  cHigh++;
+                                  addCompatLine("[" + (bps / 1000) + "kbps] " + path + n);
+                              }
+                          }
+                      } catch (Exception e) {
+                          cUnreadable++;
+                          addCompatLine("[تعذّرت قراءة الجودة] " + path + n);
+                      }
+                      if (cMp3 % 20 == 0) {
+                          final int c = cMp3;
+                          ui.post(() -> tvStatus.setText("جارٍ فحص التوافق... فُحص " + c + " ملف MP3"));
+                      }
+                  }
+              }
+
+              private void compat() {
+                  if (rootUri == null) {
+                      Toast.makeText(this, "اختر الكارت أو المجلد أولاً", Toast.LENGTH_LONG).show();
+                      return;
+                  }
+                  cancelled = false;
+                  tvLog.setText("");
+                  tvStatus.setText("جارٍ فحص التوافق...");
+                  new Thread(() -> {
+                      MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                      try {
+                          cNonMp3 = 0;
+                          cHigh = 0;
+                          cUnreadable = 0;
+                          cMp3 = 0;
+                          synchronized (cLines) {
+                              cLines.clear();
+                          }
+                          compatWalk(DocumentFile.fromTreeUri(this, rootUri), "/", mmr);
+                          int ok = cMp3 - cHigh - cUnreadable;
+                          StringBuilder sb = new StringBuilder();
+                          synchronized (cLines) {
+                              int shown = Math.min(cLines.size(), 80);
+                              for (int i = 0; i < shown; i++) sb.append(cLines.get(i)).append("\n");
+                              if (cLines.size() > shown) sb.append("... و").append(cLines.size() - shown).append(" أخرى\n");
+                          }
+                          String head = cancelled ? "تم الإيقاف — " : "";
+                          final String st = head + "فحص التوافق: صالحة " + ok + " | ليست MP3: " + cNonMp3
+                                  + " | فوق 128kbps: " + cHigh + " | تعذّرت القراءة: " + cUnreadable;
+                          final String detail = (sb.length() == 0)
+                                  ? "لا توجد ملفات يتجاهلها الراديو.\n"
+                                  : "الملفات التالية يتجاهلها الراديو أو يحتمل ذلك، ولم يتغيّر فيها شيء:\n" + sb;
+                          ui.post(() -> {
+                              tvStatus.setText(st);
+                              tvLog.setText(detail);
+                          });
+                      } catch (Exception e) {
+                          ui.post(() -> tvStatus.setText("خطأ: " + e.getMessage()));
+                      } finally {
+                          try { mmr.release(); } catch (Exception ignored) { }
+                      }
+                  }).start();
+              }
+
+              private void start() {
+                  cancelled = false;
+                  btnStart.setEnabled(false);
+                  tvLog.setText("");
+                  dirsDone = 0;
+                  failures = 0;
+                  dirsOrdered = 0;
+                  modeCount[0] = 0;
+                  modeCount[1] = 0;
+                  modeCount[2] = 0;
+                  ui.post(() -> {
+                      bar.setMax(Math.max(dirsTotal, 1));
+                      bar.setProgress(0);
+                  });
+                  new Thread(() -> {
+                      try {
+                          DocumentFile r = DocumentFile.fromTreeUri(this, rootUri);
+                          processDir(r, "/");
+                          final String end = cancelled ? "تم الإيقاف" : "اكتمل";
+                          final String msg = end + " — مجلدات: " + dirsDone + " | مرتبة حسب ما يعرضه النظام: "
+                                  + dirsOrdered + " | أخطاء: " + failures + "\n" + modesLine();
+                          ui.post(() -> tvStatus.setText(msg));
+                      } catch (Exception e) {
+                          ui.post(() -> tvStatus.setText("خطأ: " + e.getMessage()));
+                      } finally {
+                          ui.post(() -> btnStart.setEnabled(true));
+                      }
+                  }).start();
+              }
+
+              private Uri treeUri(Uri moved, String fallbackId) {
+                  String id = (moved != null) ? DocumentsContract.getDocumentId(moved) : fallbackId;
+                  return DocumentsContract.buildDocumentUriUsingTree(rootUri, id);
+              }
+
+              // إن بقيت ملفات في المجلد المؤقت من تشغيل سابق متوقف، تُعاد أولاً
+              private void restoreTemp(DocumentFile dir, DocumentFile temp) {
+                  List<Item> kids = new ArrayList<>();
+                  for (DocumentFile f : temp.listFiles()) {
+                      String n = f.getName();
+                      if (n == null) continue;
+                      Item it = new Item();
+                      it.name = n;
+                      it.file = f;
+                      it.dir = f.isDirectory();
+                      kids.add(it);
+                  }
+                  for (Item it : Sorter.sort(kids).items) {
+                      try {
+                          DocumentsContract.moveDocument(getContentResolver(), it.file.getUri(), temp.getUri(), dir.getUri());
+                      } catch (Exception e) {
+                          failures++;
+                          log("تعذّرت إعادة " + it.name + " — " + e.getMessage());
+                      }
+                  }
+                  if (temp.listFiles().length == 0) temp.delete();
+              }
+
+              private void processDir(DocumentFile dir, String path) {
+                  if (cancelled) return;
+
+                  DocumentFile old = dir.findFile(TMP);
+                  if (old != null && old.isDirectory()) restoreTemp(dir, old);
+
+                  Ordered ord = order(dir);
+                  List<Item> items = ord.items;
+
+                  for (Item it : items) {
+                      if (it.dir) {
+                          processDir(it.file, path + it.name + "/");
+                          if (cancelled) return;
+                      }
+                  }
+
+                  dirsDone++;
+                  final int d = dirsDone;
+                  final String p = path;
+                  ui.post(() -> {
+                      bar.setProgress(d);
+                      tvStatus.setText("المجلد " + d + " من " + dirsTotal + " — " + p);
+                  });
+
+                  if (items.size() < 2) {
+                      dirsOrdered++;
+                      return;
+                  }
+                  modeCount[ord.mode]++;
+
+                  DocumentFile temp = dir.createDirectory(TMP);
+                  if (temp == null) {
+                      failures++;
+                      log("تعذّر إنشاء مجلد مؤقت في " + path);
+                      return;
+                  }
+                  Uri dirUri = dir.getUri();
+                  Uri tmpUri = temp.getUri();
+                  String tmpId = DocumentsContract.getDocumentId(tmpUri);
+
+                  List<Uri> moved = new ArrayList<>();
+                  for (Item it : items) {
+                      if (cancelled) break;
+                      try {
+                          Uri nu = DocumentsContract.moveDocument(getContentResolver(), it.file.getUri(), dirUri, tmpUri);
+                          moved.add(treeUri(nu, tmpId + "/" + it.name));
+                      } catch (Exception e) {
+                          failures++;
+                          log("تعذّر نقل " + it.name + " في " + path + " — " + e.getMessage());
+                          break;
+                      }
+                  }
+
+                  for (Uri u : moved) {
+                      try {
+                          DocumentsContract.moveDocument(getContentResolver(), u, tmpUri, dirUri);
+                      } catch (Exception e) {
+                          failures++;
+                          log("تعذّرت الإعادة في " + path + " — " + e.getMessage() + " (أعد التشغيل لإكمالها)");
+                      }
+                  }
+
+                  if (temp.listFiles().length == 0) {
+                      temp.delete();
+                  } else {
+                      log("بقيت ملفات في " + TMP + " داخل " + path + " — أعد التشغيل لإكمالها");
+                  }
+
+                  List<String> expected = new ArrayList<>();
+                  for (Item it : items) expected.add(it.name);
+                  List<String> actual = new ArrayList<>();
+                  for (DocumentFile f : dir.listFiles()) {
+                      String n = f.getName();
+                      if (n == null || skip(n)) continue;
+                      actual.add(n);
+                  }
+                  if (expected.equals(actual)) {
+                      dirsOrdered++;
+                  } else {
+                      log("الترتيب الظاهر مختلف في " + path);
+                  }
+              }
+
+              private void log(String s) {
+                  ui.post(() -> tvLog.append(s + "\n"));
+              }
+          }
+          EOF
+
+          cat > app/src/main/java/com/example/ordercopy/DurationTool.java <<'EOF'
+          package com.example.ordercopy;
+
+          import android.content.Intent;
+          import android.graphics.Typeface;
+          import android.media.MediaMetadataRetriever;
+          import android.net.Uri;
+          import android.os.Handler;
+          import android.text.SpannableStringBuilder;
+          import android.text.Spanned;
+          import android.text.style.StyleSpan;
+          import android.view.Gravity;
+          import android.view.View;
+          import android.widget.Button;
+          import android.widget.LinearLayout;
+          import android.widget.ProgressBar;
+          import android.widget.TextView;
+
+          import androidx.documentfile.provider.DocumentFile;
+
+          import java.util.ArrayList;
+          import java.util.List;
+          import java.util.Locale;
+          import java.util.concurrent.ExecutorService;
+          import java.util.concurrent.Executors;
+          import java.util.concurrent.TimeUnit;
+          import java.util.concurrent.atomic.AtomicInteger;
+
+          public class DurationTool {
+
+              static final int GOLD = 0xFFD4AF37;
+              static final int MINT = 0xFF7ED6A8;
+              static final int CORAL = 0xFFFF8A75;
+              static final int CREAM = 0xFFF5F0E1;
+              static final int SOFT = 0xFFB9CFC4;
+              static final int CARDC = 0xFF174C3A;
+              static final int LINEC = 0xFF2C6A54;
+
+              private static final String[] EXTS = {"mp3", "m4a", "wav", "ogg", "oga", "opus", "flac", "aac", "wma", "amr", "mka", "3gp"};
+
+              static class FileRec {
+                  String name;
+                  int number;
+                  long ms = -1;
+              }
+
+              static class SubRec {
+                  String name;
+                  List<FileRec> files = new ArrayList<>();
+                  int start;
+                  long totalMs;
+                  int bad;
+              }
+
+              static class MainRec {
+                  String name;
+                  List<SubRec> subs = new ArrayList<>();
+              }
+
+              static class CardData {
+                  String rootName = "";
+                  List<MainRec> mains = new ArrayList<>();
+                  long totalMs;
+                  int files;
+                  int bad;
+              }
+
+              static CardData last = null;
+
+              private final MainActivity act;
+              private final Handler ui;
+              private final float d;
+
+              private Button btnPick, btnTable;
+              private TextView tvName, tvStatus, tvCount, tvWarn, tvDetailTitle;
+              private TextView numH, numM, numS;
+              private ProgressBar prog;
+              private LinearLayout totals, detailsList;
+              private volatile boolean busy = false;
+
+              DurationTool(MainActivity act, Handler ui, float density) {
+                  this.act = act;
+                  this.ui = ui;
+                  this.d = density;
+              }
+
+              // ---------------------------------------------------------------- واجهة
+
+              LinearLayout build() {
+                  int pad = (int) (14 * d);
+                  LinearLayout p = new LinearLayout(act);
+                  p.setOrientation(LinearLayout.VERTICAL);
+
+                  btnPick = act.makeButton("اختر مجلد الكارت", v -> act.startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), 2));
+                  p.addView(btnPick);
+
+                  tvName = act.text("لم يتم الاختيار", 15, SOFT, false);
+                  p.addView(tvName);
+
+                  prog = new ProgressBar(act);
+                  prog.setIndeterminate(true);
+                  prog.setVisibility(View.GONE);
+                  p.addView(prog, new LinearLayout.LayoutParams((int) (32 * d), (int) (32 * d)));
+
+                  tvStatus = act.text("", 14, SOFT, false);
+                  p.addView(tvStatus);
+
+                  totals = new LinearLayout(act);
+                  totals.setOrientation(LinearLayout.VERTICAL);
+                  totals.setBackground(act.shape(CARDC, 16, 0));
+                  totals.setPadding(pad, pad, pad, pad);
+                  totals.setVisibility(View.GONE);
+
+                  TextView lbl = act.text("إجمالي المدة", 14, SOFT, false);
+                  lbl.setGravity(Gravity.CENTER);
+                  totals.addView(lbl, new LinearLayout.LayoutParams(-1, -2));
+
+                  LinearLayout row = new LinearLayout(act);
+                  row.setOrientation(LinearLayout.HORIZONTAL);
+                  numS = new TextView(act);
+                  numM = new TextView(act);
+                  numH = new TextView(act);
+                  row.addView(cell(numS, "ثانية", CORAL), new LinearLayout.LayoutParams(0, -2, 1f));
+                  row.addView(cell(numM, "دقيقة", MINT), new LinearLayout.LayoutParams(0, -2, 1f));
+                  row.addView(cell(numH, "ساعة", GOLD), new LinearLayout.LayoutParams(0, -2, 1f));
+                  totals.addView(row, new LinearLayout.LayoutParams(-1, -2));
+
+                  tvCount = act.text("", 14, CREAM, false);
+                  tvCount.setGravity(Gravity.CENTER);
+                  totals.addView(tvCount, new LinearLayout.LayoutParams(-1, -2));
+
+                  LinearLayout.LayoutParams tl = new LinearLayout.LayoutParams(-1, -2);
+                  tl.topMargin = (int) (10 * d);
+                  p.addView(totals, tl);
+
+                  tvWarn = act.text("", 13, 0xFFF6E3A1, false);
+                  tvWarn.setBackground(act.shape(0xFF5A4A14, 10, 0));
+                  tvWarn.setPadding((int) (10 * d), (int) (8 * d), (int) (10 * d), (int) (8 * d));
+                  tvWarn.setVisibility(View.GONE);
+                  LinearLayout.LayoutParams wl = new LinearLayout.LayoutParams(-1, -2);
+                  wl.topMargin = (int) (10 * d);
+                  p.addView(tvWarn, wl);
+
+                  btnTable = act.makeButton("عرض جدول الكارت وطباعته", v -> openTable());
+                  btnTable.setEnabled(false);
+                  p.addView(btnTable);
+
+                  tvDetailTitle = act.text("التفصيل", 17, GOLD, true);
+                  tvDetailTitle.setPadding(0, (int) (14 * d), 0, (int) (4 * d));
+                  tvDetailTitle.setVisibility(View.GONE);
+                  p.addView(tvDetailTitle);
+
+                  detailsList = new LinearLayout(act);
+                  detailsList.setOrientation(LinearLayout.VERTICAL);
+                  p.addView(detailsList, new LinearLayout.LayoutParams(-1, -2));
+
+                  return p;
+              }
+
+              private LinearLayout cell(TextView num, String label, int color) {
+                  LinearLayout c = new LinearLayout(act);
+                  c.setOrientation(LinearLayout.VERTICAL);
+                  num.setTextSize(36);
+                  num.setTextColor(color);
+                  num.setTypeface(null, Typeface.BOLD);
+                  num.setGravity(Gravity.CENTER);
+                  num.setText(MainActivity.ar("0"));
+                  TextView w = act.text(label, 14, color, false);
+                  w.setGravity(Gravity.CENTER);
+                  c.addView(num, new LinearLayout.LayoutParams(-1, -2));
+                  c.addView(w, new LinearLayout.LayoutParams(-1, -2));
+                  return c;
+              }
+
+              private void openTable() {
+                  if (last == null) return;
+                  act.startActivity(new Intent(act, TableActivity.class));
+              }
+
+              // ---------------------------------------------------------------- الحساب
+
+              void onPicked(final Uri uri) {
+                  if (busy) return;
+                  busy = true;
+                  btnPick.setEnabled(false);
+                  btnTable.setEnabled(false);
+                  totals.setVisibility(View.GONE);
+                  tvWarn.setVisibility(View.GONE);
+                  tvDetailTitle.setVisibility(View.GONE);
+                  detailsList.removeAllViews();
+                  prog.setVisibility(View.VISIBLE);
+                  tvStatus.setText("جاري قراءة الملفات...");
+                  new Thread(() -> compute(uri)).start();
+              }
+
+              private static boolean isAudio(MainActivity.Item it) {
+                  String n = it.name.toLowerCase(Locale.US);
+                  int dot = n.lastIndexOf('.');
+                  if (dot < 0) return false;
+                  String ext = n.substring(dot + 1);
+                  for (String e : EXTS) {
+                      if (e.equals(ext)) return true;
+                  }
+                  return false;
+              }
+
+              private void addFile(SubRec s, MainActivity.Item it, int[] counter, List<FileRec> recs, List<Uri> uris) {
+                  FileRec r = new FileRec();
+                  r.name = it.name;
+                  counter[0]++;
+                  r.number = counter[0];
+                  s.files.add(r);
+                  recs.add(r);
+                  uris.add(it.file.getUri());
+              }
+
+              // يمشي بنفس ترتيب الراديو: ملفات المجلد أولاً ثم مجلداته الفرعية
+              private void collect(DocumentFile dir, SubRec s, int[] counter, List<FileRec> recs, List<Uri> uris) {
+                  MainActivity.Ordered o = act.order(dir);
+                  for (MainActivity.Item it : o.items) {
+                      if (it.dir) {
+                          collect(it.file, s, counter, recs, uris);
+                      } else if (isAudio(it)) {
+                          addFile(s, it, counter, recs, uris);
+                      }
+                  }
+              }
+
+              private long durationMs(Uri uri) {
+                  MediaMetadataRetriever r = new MediaMetadataRetriever();
+                  try {
+                      r.setDataSource(act, uri);
+                      String v = r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                      if (v == null) return -1L;
+                      return Long.parseLong(v);
+                  } catch (Exception e) {
+                      return -1L;
+                  } finally {
+                      try {
+                          r.release();
+                      } catch (Exception ignored) {
+                      }
+                  }
+              }
+
+              private void compute(Uri uri) {
+                  try {
+                      DocumentFile root = DocumentFile.fromTreeUri(act, uri);
+                      final String rootName = (root != null && root.getName() != null) ? root.getName() : "";
+                      ui.post(() -> tvName.setText("المختار: " + rootName));
+
+                      final CardData cd = new CardData();
+                      cd.rootName = rootName;
+                      final List<FileRec> recs = new ArrayList<>();
+                      final List<Uri> uris = new ArrayList<>();
+                      int[] counter = new int[]{0};
+
+                      MainActivity.Ordered top = act.order(root);
+                      MainRec loose = null;
+                      for (MainActivity.Item it : top.items) {
+                          if (!it.dir) {
+                              if (!isAudio(it)) continue;
+                              if (loose == null) {
+                                  loose = new MainRec();
+                                  loose.name = "ملفات خارج المجلدات";
+                                  SubRec ls = new SubRec();
+                                  ls.name = "—";
+                                  loose.subs.add(ls);
+                                  cd.mains.add(loose);
+                              }
+                              addFile(loose.subs.get(0), it, counter, recs, uris);
+                          } else {
+                              MainRec m = new MainRec();
+                              m.name = it.name;
+                              MainActivity.Ordered inner = act.order(it.file);
+                              SubRec direct = null;
+                              for (MainActivity.Item x : inner.items) {
+                                  if (!x.dir) {
+                                      if (!isAudio(x)) continue;
+                                      if (direct == null) {
+                                          direct = new SubRec();
+                                          direct.name = "—";
+                                          m.subs.add(direct);
+                                      }
+                                      addFile(direct, x, counter, recs, uris);
+                                  } else {
+                                      SubRec s = new SubRec();
+                                      s.name = x.name;
+                                      collect(x.file, s, counter, recs, uris);
+                                      if (!s.files.isEmpty()) m.subs.add(s);
+                                  }
+                              }
+                              if (!m.subs.isEmpty()) cd.mains.add(m);
+                          }
+                      }
+
+                      final int n = recs.size();
+                      final AtomicInteger done = new AtomicInteger(0);
+                      ExecutorService pool = Executors.newFixedThreadPool(4);
+                      for (int i = 0; i < n; i++) {
+                          final int idx = i;
+                          pool.execute(() -> {
+                              recs.get(idx).ms = durationMs(uris.get(idx));
+                              final int dn = done.incrementAndGet();
+                              if (dn % 10 == 0 || dn == n) {
+                                  ui.post(() -> tvStatus.setText(MainActivity.ar(dn + " / " + n)));
+                              }
+                          });
+                      }
+                      pool.shutdown();
+                      pool.awaitTermination(3, TimeUnit.HOURS);
+
+                      long total = 0;
+                      int bad = 0;
+                      int nfiles = 0;
+                      for (MainRec m : cd.mains) {
+                          for (SubRec s : m.subs) {
+                              s.start = s.files.isEmpty() ? 0 : s.files.get(0).number;
+                              for (FileRec f : s.files) {
+                                  nfiles++;
+                                  if (f.ms >= 0) {
+                                      s.totalMs += f.ms;
+                                  } else {
+                                      s.bad++;
+                                      bad++;
+                                  }
+                              }
+                              total += s.totalMs;
+                          }
+                      }
+                      cd.totalMs = total;
+                      cd.files = nfiles;
+                      cd.bad = bad;
+                      last = cd;
+                      ui.post(() -> show(cd));
+                  } catch (Exception e) {
+                      final String msg = String.valueOf(e.getMessage());
+                      ui.post(() -> {
+                          busy = false;
+                          prog.setVisibility(View.GONE);
+                          btnPick.setEnabled(true);
+                          tvStatus.setText("خطأ: " + msg);
+                      });
+                  }
+              }
+
+              // ---------------------------------------------------------------- العرض
+
+              private static String two(long v) {
+                  return String.format(Locale.US, "%02d", v);
+              }
+
+              private LinearLayout timeBox(long ms, int sp) {
+                  long s = (ms + 500) / 1000;
+                  long h = s / 3600;
+                  long m = (s % 3600) / 60;
+                  long sec = s % 60;
+                  LinearLayout b = new LinearLayout(act);
+                  b.setOrientation(LinearLayout.HORIZONTAL);
+                  b.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                  TextView th = act.text(MainActivity.ar(String.valueOf(h)) + " س", sp, GOLD, true);
+                  TextView tm = act.text(MainActivity.ar(two(m)) + " د", sp, MINT, true);
+                  TextView ts = act.text(MainActivity.ar(two(sec)) + " ث", sp, CORAL, true);
+                  tm.setPadding((int) (8 * d), 0, (int) (8 * d), 0);
+                  b.addView(th);
+                  b.addView(tm);
+                  b.addView(ts);
+                  return b;
+              }
+
+              private void show(CardData cd) {
+                  busy = false;
+                  prog.setVisibility(View.GONE);
+                  btnPick.setEnabled(true);
+                  tvStatus.setText("");
+                  if (cd.files == 0) {
+                      tvStatus.setText("مفيش ملفات صوتية في المجلد ده");
+                      return;
+                  }
+                  long s = (cd.totalMs + 500) / 1000;
+                  numH.setText(MainActivity.ar(String.valueOf(s / 3600)));
+                  numM.setText(MainActivity.ar(two((s % 3600) / 60)));
+                  numS.setText(MainActivity.ar(two(s % 60)));
+                  tvCount.setText(MainActivity.ar(String.valueOf(cd.files)) + " ملف");
+                  totals.setVisibility(View.VISIBLE);
+                  if (cd.bad > 0) {
+                      tvWarn.setText(MainActivity.ar(String.valueOf(cd.bad)) + " ملفات لم تُحسب");
+                      tvWarn.setVisibility(View.VISIBLE);
+                  }
+
+                  detailsList.removeAllViews();
+                  for (MainRec m : cd.mains) {
+                      for (SubRec sub : m.subs) {
+                          LinearLayout row = new LinearLayout(act);
+                          row.setOrientation(LinearLayout.HORIZONTAL);
+                          row.setPadding(0, (int) (10 * d), 0, (int) (10 * d));
+
+                          SpannableStringBuilder sb = new SpannableStringBuilder();
+                          int a = sb.length();
+                          sb.append(m.name);
+                          sb.setSpan(new StyleSpan(Typeface.BOLD), a, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                          if (!"—".equals(sub.name)) {
+                              sb.append("  ");
+                              int b = sb.length();
+                              sb.append(sub.name);
+                              sb.setSpan(new StyleSpan(Typeface.ITALIC), b, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                          }
+                          sb.append("  (" + MainActivity.ar(String.valueOf(sub.files.size())) + ")");
+                          TextView nm = act.text("", 15, CREAM, false);
+                          nm.setText(sb);
+                          row.addView(nm, new LinearLayout.LayoutParams(0, -2, 1f));
+                          row.addView(timeBox(sub.totalMs, 15), new LinearLayout.LayoutParams(-2, -2));
+                          detailsList.addView(row, new LinearLayout.LayoutParams(-1, -2));
+
+                          View line = new View(act);
+                          line.setBackgroundColor(LINEC);
+                          detailsList.addView(line, new LinearLayout.LayoutParams(-1, 1));
+                      }
+                  }
+                  tvDetailTitle.setVisibility(View.VISIBLE);
+                  btnTable.setEnabled(true);
+              }
+          }
+          EOF
+
+          cat > app/src/main/java/com/example/ordercopy/TableBuilder.java <<'EOF'
+          package com.example.ordercopy;
+
+          import java.util.Locale;
+
+          public class TableBuilder {
+
+              static String esc(String s) {
+                  return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+              }
+
+              // يحذف الامتداد والترقيم في أول الاسم: 001-الفاتحة.mp3 -> الفاتحة
+              static String clean(String name) {
+                  String n = name;
+                  int dot = n.lastIndexOf('.');
+                  if (dot > 0 && n.length() - dot <= 6) n = n.substring(0, dot);
+                  int i = 0;
+                  while (i < n.length() && (Character.isDigit(n.charAt(i)) || " -_.)(".indexOf(n.charAt(i)) >= 0)) i++;
+                  String rest = n.substring(i).trim();
+                  return rest.isEmpty() ? n : rest;
+              }
+
+              static String fmt(long ms) {
+                  if (ms < 0) return "—";
+                  long s = (ms + 500) / 1000;
+                  long h = s / 3600;
+                  long m = (s % 3600) / 60;
+                  long sec = s % 60;
+                  if (h > 0) return String.format(Locale.US, "%d:%02d:%02d", h, m, sec);
+                  return String.format(Locale.US, "%d:%02d", m, sec);
+              }
+
+              static String fmtFull(long ms) {
+                  long s = (ms + 500) / 1000;
+                  return String.format(Locale.US, "%d:%02d:%02d", s / 3600, (s % 3600) / 60, s % 60);
+              }
+
+              static String build(DurationTool.CardData cd, boolean details, int cols, boolean landscape) {
+                  int width = landscape ? 1040 : 730;
+                  StringBuilder h = new StringBuilder();
+                  h.append("<!DOCTYPE html><html dir='rtl' lang='ar'><head><meta charset='utf-8'>");
+                  h.append("<meta name='viewport' content='width=").append(width + 30).append("'>");
+                  h.append("<style>");
+                  h.append("body{font-family:sans-serif;margin:0;padding:8px 10px;color:#111;background:#fff;width:").append(width).append("px}");
+                  h.append("h1{font-size:18px;text-align:center;margin:4px 0 10px}");
+                  h.append("table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:").append(details ? 11 : 14).append("px}");
+                  h.append("th,td{border:1px solid #444;padding:4px 3px;text-align:center;word-wrap:break-word}");
+                  h.append("th{background:#0F3D2E;color:#F5E6A8;font-weight:bold;-webkit-print-color-adjust:exact}");
+                  h.append("thead{display:table-header-group}tr{page-break-inside:avoid}");
+                  h.append("tr.blk td{border-top:2px solid #000}");
+                  h.append("td.tot{background:#EFEBDD;font-weight:bold;-webkit-print-color-adjust:exact}");
+                  h.append("td.main{font-weight:bold}td.sub{font-style:italic}td[rowspan]{vertical-align:top}");
+                  h.append(".t{direction:ltr;unicode-bidi:embed}");
+                  h.append(".note{font-size:11px;color:#555;margin-top:6px}");
+                  h.append("</style></head><body>");
+                  h.append("<h1>جدول محتويات الكارت");
+                  if (cd.rootName != null && cd.rootName.length() > 0) h.append(" — ").append(esc(cd.rootName));
+                  h.append("</h1>");
+
+                  if (!details) {
+                      buildSimple(h, cd);
+                  } else {
+                      buildDetails(h, cd, cols);
+                  }
+                  if (cd.bad > 0) {
+                      h.append("<div class='note'>— ملف لم تُحسب مدته ولم يدخل في الإجمالي</div>");
+                  }
+                  h.append("</body></html>");
+                  return h.toString();
+              }
+
+              private static void buildSimple(StringBuilder h, DurationTool.CardData cd) {
+                  h.append("<table><colgroup><col style='width:7%'><col style='width:20%'><col style='width:26%'>");
+                  h.append("<col style='width:12%'><col style='width:14%'><col style='width:21%'></colgroup>");
+                  h.append("<thead><tr><th>المسلسل</th><th>المجلد الرئيسي</th><th>المجلدات الفرعية</th>");
+                  h.append("<th>عدد الملفات</th><th>تبدأ من الرقم</th><th>إجمالي الوقت</th></tr></thead><tbody>");
+                  for (int mi = 0; mi < cd.mains.size(); mi++) {
+                      DurationTool.MainRec m = cd.mains.get(mi);
+                      boolean first = true;
+                      for (DurationTool.SubRec s : m.subs) {
+                          h.append("<tr").append(first ? " class='blk'" : "").append(">");
+                          if (first) {
+                              h.append("<td rowspan='").append(m.subs.size()).append("'>").append(mi + 1).append("</td>");
+                              h.append("<td rowspan='").append(m.subs.size()).append("' class='main'>").append(esc(m.name)).append("</td>");
+                              first = false;
+                          }
+                          h.append("<td class='sub'>").append(esc(s.name)).append("</td>");
+                          h.append("<td>").append(s.files.size()).append("</td>");
+                          h.append("<td>").append(s.start).append("</td>");
+                          h.append("<td class='t'>").append(fmtFull(s.totalMs)).append("</td></tr>");
+                      }
+                  }
+                  h.append("</tbody></table>");
+              }
+
+              private static void buildDetails(StringBuilder h, DurationTool.CardData cd, int cols) {
+                  double rest = 61.0 / cols;
+                  h.append("<table><colgroup><col style='width:4%'><col style='width:11%'><col style='width:12%'>");
+                  h.append("<col style='width:6%'><col style='width:6%'>");
+                  for (int c = 0; c < cols; c++) {
+                      h.append("<col style='width:").append(String.format(Locale.US, "%.2f", rest * 0.50)).append("%'>");
+                      h.append("<col style='width:").append(String.format(Locale.US, "%.2f", rest * 0.20)).append("%'>");
+                      h.append("<col style='width:").append(String.format(Locale.US, "%.2f", rest * 0.30)).append("%'>");
+                  }
+                  h.append("</colgroup><thead><tr>");
+                  h.append("<th rowspan='2'>م</th><th rowspan='2'>المجلد الرئيسي</th><th rowspan='2'>المجلدات الفرعية</th>");
+                  h.append("<th rowspan='2'>عدد الملفات</th><th rowspan='2'>تبدأ من</th>");
+                  h.append("<th colspan='").append(3 * cols).append("'>تفاصيل الملفات</th></tr><tr>");
+                  for (int c = 0; c < cols; c++) {
+                      h.append("<th>اسم الملف</th><th>رقم التشغيل</th><th>الوقت</th>");
+                  }
+                  h.append("</tr></thead><tbody>");
+
+                  for (int mi = 0; mi < cd.mains.size(); mi++) {
+                      DurationTool.MainRec m = cd.mains.get(mi);
+                      int mainSpan = 0;
+                      for (DurationTool.SubRec s : m.subs) {
+                          mainSpan += 1 + (int) Math.ceil(s.files.size() / (double) cols);
+                      }
+                      boolean first = true;
+                      for (DurationTool.SubRec s : m.subs) {
+                          int cnt = s.files.size();
+                          int rowsN = (int) Math.ceil(cnt / (double) cols);
+                          int span = 1 + rowsN;
+                          h.append("<tr class='blk'>");
+                          if (first) {
+                              h.append("<td rowspan='").append(mainSpan).append("'>").append(mi + 1).append("</td>");
+                              h.append("<td rowspan='").append(mainSpan).append("' class='main'>").append(esc(m.name)).append("</td>");
+                              first = false;
+                          }
+                          h.append("<td rowspan='").append(span).append("' class='sub'>").append(esc(s.name)).append("</td>");
+                          h.append("<td rowspan='").append(span).append("'>").append(cnt).append("</td>");
+                          h.append("<td rowspan='").append(span).append("'>").append(s.start).append("</td>");
+                          h.append("<td colspan='").append(3 * cols).append("' class='tot'>إجمالي الوقت: <span class='t'>");
+                          h.append(fmtFull(s.totalMs)).append("</span></td></tr>");
+                          for (int r = 0; r < rowsN; r++) {
+                              h.append("<tr>");
+                              for (int c = 0; c < cols; c++) {
+                                  int idx = c * rowsN + r;
+                                  if (idx < cnt) {
+                                      DurationTool.FileRec f = s.files.get(idx);
+                                      h.append("<td>").append(esc(clean(f.name))).append("</td>");
+                                      h.append("<td>").append(f.number).append("</td>");
+                                      h.append("<td class='t'>").append(fmt(f.ms)).append("</td>");
+                                  } else {
+                                      h.append("<td></td><td></td><td></td>");
+                                  }
+                              }
+                              h.append("</tr>");
+                          }
+                      }
+                  }
+                  h.append("</tbody></table>");
+              }
+          }
+          EOF
+
+          cat > app/src/main/java/com/example/ordercopy/TableActivity.java <<'EOF'
+          package com.example.ordercopy;
+
+          import android.app.Activity;
+          import android.content.Context;
+          import android.content.res.ColorStateList;
+          import android.graphics.drawable.GradientDrawable;
+          import android.graphics.drawable.StateListDrawable;
+          import android.os.Bundle;
+          import android.print.PrintAttributes;
+          import android.print.PrintDocumentAdapter;
+          import android.print.PrintManager;
+          import android.view.View;
+          import android.webkit.WebSettings;
+          import android.webkit.WebView;
+          import android.widget.Button;
+          import android.widget.LinearLayout;
+
+          public class TableActivity extends Activity {
+
+              private static final int BG = 0xFF0F3D2E;
+              private static final int GOLD = 0xFFD4AF37;
+
+              private WebView web;
+              private boolean details = false;
+              private boolean landscape = true;
+              private int cols = 3;
+              private Button bDetails, bCols, bOrient;
+              private float dens;
+
+              @Override
+              protected void onCreate(Bundle b) {
+                  super.onCreate(b);
+                  if (getActionBar() != null) getActionBar().hide();
+                  if (DurationTool.last == null) {
+                      finish();
+                      return;
+                  }
+                  getWindow().setStatusBarColor(BG);
+                  getWindow().setNavigationBarColor(BG);
+                  dens = getResources().getDisplayMetrics().density;
+
+                  LinearLayout root = new LinearLayout(this);
+                  root.setOrientation(LinearLayout.VERTICAL);
+                  root.setBackgroundColor(BG);
+                  root.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+                  int pad = (int) (8 * dens);
+                  root.setPadding(pad, (int) (16 * dens), pad, pad);
+
+                  LinearLayout r1 = new LinearLayout(this);
+                  r1.setOrientation(LinearLayout.HORIZONTAL);
+                  bDetails = btn("تفاصيل الملفات: إيقاف", false);
+                  bCols = btn("أعمدة الملفات: 3", false);
+                  bCols.setEnabled(false);
+                  r1.addView(bDetails, rowLp());
+                  r1.addView(bCols, rowLp());
+                  root.addView(r1, new LinearLayout.LayoutParams(-1, -2));
+
+                  LinearLayout r2 = new LinearLayout(this);
+                  r2.setOrientation(LinearLayout.HORIZONTAL);
+                  bOrient = btn("الورقة: A4 عرضي", false);
+                  Button bPrint = btn("طباعة / حفظ PDF", true);
+                  r2.addView(bOrient, rowLp());
+                  r2.addView(bPrint, rowLp());
+                  root.addView(r2, new LinearLayout.LayoutParams(-1, -2));
+
+                  bDetails.setOnClickListener(v -> {
+                      details = !details;
+                      bDetails.setText(details ? "تفاصيل الملفات: تشغيل" : "تفاصيل الملفات: إيقاف");
+                      bCols.setEnabled(details);
+                      reload();
+                  });
+                  bCols.setOnClickListener(v -> {
+                      cols = (cols >= 4) ? 2 : cols + 1;
+                      bCols.setText("أعمدة الملفات: " + cols);
+                      reload();
+                  });
+                  bOrient.setOnClickListener(v -> {
+                      landscape = !landscape;
+                      bOrient.setText(landscape ? "الورقة: A4 عرضي" : "الورقة: A4 طولي");
+                      reload();
+                  });
+                  bPrint.setOnClickListener(v -> printTable());
+
+                  web = new WebView(this);
+                  web.setBackgroundColor(0xFFFFFFFF);
+                  WebSettings ws = web.getSettings();
+                  ws.setBuiltInZoomControls(true);
+                  ws.setDisplayZoomControls(false);
+                  ws.setUseWideViewPort(true);
+                  ws.setLoadWithOverviewMode(true);
+                  LinearLayout.LayoutParams wlp = new LinearLayout.LayoutParams(-1, 0, 1f);
+                  wlp.topMargin = (int) (8 * dens);
+                  root.addView(web, wlp);
+
+                  setContentView(root);
+                  reload();
+              }
+
+              private LinearLayout.LayoutParams rowLp() {
+                  LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, (int) (48 * dens), 1f);
+                  lp.setMargins((int) (3 * dens), (int) (3 * dens), (int) (3 * dens), (int) (3 * dens));
+                  return lp;
+              }
+
+              private GradientDrawable shape(int color, int stroke) {
+                  GradientDrawable g = new GradientDrawable();
+                  g.setColor(color);
+                  g.setCornerRadius(12 * dens);
+                  if (stroke != 0) g.setStroke((int) Math.max(1, dens), stroke);
+                  return g;
+              }
+
+              private Button btn(String text, boolean primary) {
+                  Button bt = new Button(this);
+                  bt.setText(text);
+                  bt.setAllCaps(false);
+                  bt.setTextSize(14);
+                  StateListDrawable sl = new StateListDrawable();
+                  sl.addState(new int[]{-android.R.attr.state_enabled}, shape(0xFF3A5A4C, 0));
+                  sl.addState(new int[]{}, primary ? shape(GOLD, 0) : shape(0xFF174C3A, GOLD));
+                  bt.setBackground(sl);
+                  bt.setTextColor(new ColorStateList(
+                          new int[][]{new int[]{-android.R.attr.state_enabled}, new int[]{}},
+                          new int[]{0xFF8AA79B, primary ? 0xFF1B2A22 : GOLD}));
+                  return bt;
+              }
+
+              private void reload() {
+                  String html = TableBuilder.build(DurationTool.last, details, cols, landscape);
+                  web.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+              }
+
+              private void printTable() {
+                  PrintManager pm = (PrintManager) getSystemService(Context.PRINT_SERVICE);
+                  PrintDocumentAdapter adapter = web.createPrintDocumentAdapter("card_table");
+                  PrintAttributes.MediaSize size = landscape
+                          ? PrintAttributes.MediaSize.ISO_A4.asLandscape()
+                          : PrintAttributes.MediaSize.ISO_A4;
+                  PrintAttributes attrs = new PrintAttributes.Builder().setMediaSize(size).build();
+                  pm.print("جدول الكارت", adapter, attrs);
+              }
+          }
+          EOF
+
+          cat > app/src/main/java/com/example/ordercopy/Sorter.java <<'EOF'
+          package com.example.ordercopy;
+
+          import java.util.ArrayList;
+          import java.util.Collections;
+          import java.util.HashMap;
+          import java.util.HashSet;
+          import java.util.List;
+          import java.util.Map;
+          import java.util.Set;
+
+          public class Sorter {
+
+              public static final int MODE_QURAN = 0;
+              public static final int MODE_NUMBERS = 1;
+              public static final int MODE_ALPHA = 2;
+
+              public static String modeName(int m) {
+                  if (m == MODE_QURAN) return "ترتيب المصحف";
+                  if (m == MODE_NUMBERS) return "ترتيب الأرقام";
+                  return "ترتيب أبجدي";
+              }
+
+              public static class Result {
+                  public List<MainActivity.Item> items = new ArrayList<>();
+                  public int mode = MODE_ALPHA;
+              }
+
+              static class Info {
+                  MainActivity.Item item;
+                  String key;
+                  List<String> toks;
+                  int quran = -1;
+                  long digits = -1;
+                  int word = -1;
+                  long num = -1;
+              }
+
+              // ================= التطبيع =================
+
+              static String norm(String s) {
+                  StringBuilder sb = new StringBuilder(s.length());
+                  for (int i = 0; i < s.length(); i++) {
+                      char c = s.charAt(i);
+                      if (c >= '\u0660' && c <= '\u0669') {
+                          sb.append((char) ('0' + (c - '\u0660')));
+                          continue;
+                      }
+                      if (c >= '\u06F0' && c <= '\u06F9') {
+                          sb.append((char) ('0' + (c - '\u06F0')));
+                          continue;
+                      }
+                      if ((c >= '\u064B' && c <= '\u065F') || c == '\u0670' || c == '\u0640' || c == '\u0621') continue;
+                      switch (c) {
+                          case '\u0623':
+                          case '\u0625':
+                          case '\u0622':
+                          case '\u0671':
+                              c = '\u0627';
+                              break;
+                          case '\u0649':
+                          case '\u0626':
+                              c = '\u064A';
+                              break;
+                          case '\u0629':
+                              c = '\u0647';
+                              break;
+                          case '\u0624':
+                              c = '\u0648';
+                              break;
+                          default:
+                              break;
+                      }
+                      sb.append(Character.toLowerCase(c));
+                  }
+                  return sb.toString();
+              }
+
+              static boolean isDigits(String t) {
+                  return t.length() > 0 && t.charAt(0) >= '0' && t.charAt(0) <= '9';
+              }
+
+              static List<String> tokens(String s) {
+                  List<String> out = new ArrayList<>();
+                  StringBuilder cur = new StringBuilder();
+                  int kind = 0;
+                  for (int i = 0; i < s.length(); i++) {
+                      char c = s.charAt(i);
+                      int k;
+                      if (c >= '0' && c <= '9') k = 1;
+                      else if (Character.isLetter(c)) k = 2;
+                      else k = 0;
+                      if (k == 0 || k != kind) {
+                          if (cur.length() > 0) {
+                              out.add(cur.toString());
+                              cur.setLength(0);
+                          }
+                      }
+                      if (k != 0) cur.append(c);
+                      kind = k;
+                  }
+                  if (cur.length() > 0) out.add(cur.toString());
+                  return out;
+              }
+
+              static String stripAl(String t) {
+                  if (t.length() > 4 && t.startsWith("وال")) return "و" + t.substring(3);
+                  if (t.length() > 3 && t.startsWith("ال")) return t.substring(2);
+                  return t;
+              }
+
+              static List<String> prep(String normalized) {
+                  List<String> raw = tokens(normalized);
+                  List<String> out = new ArrayList<>();
+                  for (int i = 0; i < raw.size(); i++) {
+                      String t = raw.get(i);
+                      if (t.equals("و") && i + 1 < raw.size() && !isDigits(raw.get(i + 1))) {
+                          t = "و" + raw.get(i + 1);
+                          i++;
+                      }
+                      out.add(stripAl(t));
+                  }
+                  return out;
+              }
+
+              static String join(List<String> t, int from, int to) {
+                  StringBuilder sb = new StringBuilder();
+                  for (int i = from; i < to; i++) {
+                      if (i > from) sb.append(' ');
+                      sb.append(t.get(i));
+                  }
+                  return sb.toString();
+              }
+
+              static String phraseKey(String phrase) {
+                  List<String> t = prep(norm(phrase));
+                  return join(t, 0, t.size());
+              }
+
+              static String stripExt(String name) {
+                  int d = name.lastIndexOf('.');
+                  int len = name.length() - d - 1;
+                  if (d > 0 && len >= 1 && len <= 5) {
+                      for (int i = d + 1; i < name.length(); i++) {
+                          char c = name.charAt(i);
+                          boolean ok = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
+                          if (!ok) return name;
+                      }
+                      return name.substring(0, d);
+                  }
+                  return name;
+              }
+
+              // ================= أسماء الأرقام =================
+
+              static final String[] ORD_M = {"", "الأول", "الثاني", "الثالث", "الرابع", "الخامس", "السادس", "السابع", "الثامن", "التاسع", "العاشر"};
+              static final String[] ORD_F = {"", "الأولى", "الثانية", "الثالثة", "الرابعة", "الخامسة", "السادسة", "السابعة", "الثامنة", "التاسعة", "العاشرة"};
+              static final String[] CARD_M = {"", "واحد", "اثنان", "ثلاثة", "أربعة", "خمسة", "ستة", "سبعة", "ثمانية", "تسعة", "عشرة"};
+              static final String[] CARD_F = {"", "واحدة", "اثنتان", "ثلاث", "أربع", "خمس", "ست", "سبع", "ثمان", "تسع", "عشر"};
+              static final String[] TENS = {"", "", "عشرون", "ثلاثون", "أربعون", "خمسون", "ستون", "سبعون", "ثمانون", "تسعون"};
+              static final String[] TENS_ACC = {"", "", "عشرين", "ثلاثين", "أربعين", "خمسين", "ستين", "سبعين", "ثمانين", "تسعين"};
+
+              static final String[] EN_C = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+                      "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
+              static final String[] EN_O = {"", "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth",
+                      "eleventh", "twelfth", "thirteenth", "fourteenth", "fifteenth", "sixteenth", "seventeenth", "eighteenth", "nineteenth"};
+              static final String[] EN_TC = {"", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
+              static final String[] EN_TO = {"", "", "twentieth", "thirtieth", "fortieth", "fiftieth", "sixtieth", "seventieth", "eightieth", "ninetieth"};
+
+              static String[] unitForms(int u) {
+                  switch (u) {
+                      case 1:
+                          return new String[]{"الحادي", "الحادية", "واحد", "واحدة"};
+                      case 2:
+                          return new String[]{"الثاني", "الثانية", "اثنان", "اثنين", "اثنتان", "اثنتين"};
+                      case 8:
+                          return new String[]{ORD_M[8], ORD_F[8], CARD_M[8], CARD_F[8], "ثماني"};
+                      default:
+                          return new String[]{ORD_M[u], ORD_F[u], CARD_M[u], CARD_F[u]};
+                  }
+              }
+
+              static String[] hundredForms(int h) {
+                  if (h == 1) return new String[]{"مئة", "مائة", "مية"};
+                  if (h == 2) return new String[]{"مئتان", "مائتان", "مئتين", "مائتين", "ميتين"};
+                  return new String[]{"ثلاثمئة", "ثلاثمائة", "ثلاث مئة", "ثلاث مائة", "ثلثمائة", "ثلاثمية"};
+              }
+
+              static List<String> arabicPhrases(int n) {
+                  List<String> r = new ArrayList<>();
+                  if (n >= 1 && n <= 9) {
+                      r.add(ORD_M[n]);
+                      r.add(ORD_F[n]);
+                      r.add(CARD_M[n]);
+                      r.add(CARD_F[n]);
+                      if (n == 2) {
+                          r.add("اثنين");
+                          r.add("اثنتين");
+                      }
+                      if (n == 8) r.add("ثماني");
+                  } else if (n == 10) {
+                      r.add(ORD_M[10]);
+                      r.add(ORD_F[10]);
+                      r.add(CARD_M[10]);
+                      r.add(CARD_F[10]);
+                  } else if (n <= 19) {
+                      int u = n - 10;
+                      String om = (u == 1) ? "الحادي" : ORD_M[u];
+                      String of = (u == 1) ? "الحادية" : ORD_F[u];
+                      r.add(om + " عشر");
+                      r.add(of + " عشرة");
+                      if (u == 1) {
+                          r.add("أحد عشر");
+                          r.add("إحدى عشرة");
+                      } else if (u == 2) {
+                          r.add("اثنا عشر");
+                          r.add("اثني عشر");
+                          r.add("اثنتا عشرة");
+                          r.add("اثنتي عشرة");
+                      } else {
+                          r.add(CARD_M[u] + " عشر");
+                          r.add(CARD_F[u] + " عشرة");
+                          if (u == 8) r.add("ثماني عشرة");
+                      }
+                  } else if (n <= 99) {
+                      int t = n / 10;
+                      int u = n % 10;
+                      if (u == 0) {
+                          r.add(TENS[t]);
+                          r.add(TENS_ACC[t]);
+                      } else {
+                          for (String f : unitForms(u)) {
+                              r.add(f + " و" + TENS[t]);
+                              r.add(f + " و" + TENS_ACC[t]);
+                          }
+                      }
+                  } else {
+                      int h = n / 100;
+                      int rem = n % 100;
+                      for (String f : hundredForms(h)) {
+                          if (rem == 0) {
+                              r.add(f);
+                          } else {
+                              for (String p : arabicPhrases(rem)) r.add(f + " و" + p);
+                          }
+                      }
+                  }
+                  return r;
+              }
+
+              static List<String> englishPhrases(int n) {
+                  List<String> r = new ArrayList<>();
+                  if (n < 20) {
+                      r.add(EN_C[n]);
+                      r.add(EN_O[n]);
+                  } else if (n < 100) {
+                      int t = n / 10;
+                      int u = n % 10;
+                      if (u == 0) {
+                          r.add(EN_TC[t]);
+                          r.add(EN_TO[t]);
+                      } else {
+                          r.add(EN_TC[t] + " " + EN_C[u]);
+                          r.add(EN_TC[t] + " " + EN_O[u]);
+                      }
+                  } else {
+                      int h = n / 100;
+                      int rem = n % 100;
+                      String[] pf = (h == 1) ? new String[]{"hundred", "one hundred"} : new String[]{EN_C[h] + " hundred"};
+                      for (String f : pf) {
+                          if (rem == 0) {
+                              r.add(f);
+                              r.add(f + "th");
+                          } else {
+                              for (String p : englishPhrases(rem)) {
+                                  r.add(f + " " + p);
+                                  r.add(f + " and " + p);
+                              }
+                          }
+                      }
+                  }
+                  return r;
+              }
+
+              static final Map<String, Integer> WORDS = new HashMap<>();
+
+              static void putWord(String phrase, int n) {
+                  String k = phraseKey(phrase);
+                  if (!WORDS.containsKey(k)) WORDS.put(k, n);
+              }
+
+              static {
+                  for (int n = 1; n <= 300; n++) {
+                      for (String p : arabicPhrases(n)) putWord(p, n);
+                      for (String p : englishPhrases(n)) putWord(p, n);
+                  }
+              }
+
+              static int wordNumber(List<String> toks) {
+                  int n = toks.size();
+                  for (int i = 0; i < n; i++) {
+                      int maxLen = Math.min(6, n - i);
+                      for (int len = maxLen; len >= 1; len--) {
+                          Integer v = WORDS.get(join(toks, i, i + len));
+                          if (v != null) return v;
+                      }
+                  }
+                  return -1;
+              }
+
+              static long digitNumber(List<String> toks) {
+                  for (String t : toks) {
+                      if (isDigits(t)) {
+                          String d = t.length() > 15 ? t.substring(0, 15) : t;
+                          return Long.parseLong(d);
+                      }
+                  }
+                  return -1;
+              }
+
+              // ================= المصحف =================
+
+              static final String[][] SURAHS = {
+                      {"الفاتحة", "فاتحة الكتاب"},
+                      {"البقرة"},
+                      {"آل عمران", "عمران"},
+                      {"النساء"},
+                      {"المائدة"},
+                      {"الأنعام"},
+                      {"الأعراف"},
+                      {"الأنفال"},
+                      {"التوبة", "براءة"},
+                      {"يونس"},
+                      {"هود"},
+                      {"يوسف"},
+                      {"الرعد"},
+                      {"إبراهيم"},
+                      {"الحجر"},
+                      {"النحل"},
+                      {"الإسراء", "بني إسرائيل"},
+                      {"الكهف"},
+                      {"مريم"},
+                      {"طه"},
+                      {"الأنبياء"},
+                      {"الحج"},
+                      {"المؤمنون"},
+                      {"النور"},
+                      {"الفرقان"},
+                      {"الشعراء"},
+                      {"النمل"},
+                      {"القصص"},
+                      {"العنكبوت"},
+                      {"الروم"},
+                      {"لقمان"},
+                      {"السجدة"},
+                      {"الأحزاب"},
+                      {"سبأ"},
+                      {"فاطر", "الملائكة"},
+                      {"يس"},
+                      {"الصافات"},
+                      {"ص"},
+                      {"الزمر"},
+                      {"غافر", "المؤمن"},
+                      {"فصلت"},
+                      {"الشورى"},
+                      {"الزخرف"},
+                      {"الدخان"},
+                      {"الجاثية"},
+                      {"الأحقاف"},
+                      {"محمد"},
+                      {"الفتح"},
+                      {"الحجرات"},
+                      {"ق"},
+                      {"الذاريات"},
+                      {"الطور"},
+                      {"النجم"},
+                      {"القمر"},
+                      {"الرحمن"},
+                      {"الواقعة"},
+                      {"الحديد"},
+                      {"المجادلة"},
+                      {"الحشر"},
+                      {"الممتحنة"},
+                      {"الصف"},
+                      {"الجمعة"},
+                      {"المنافقون"},
+                      {"التغابن"},
+                      {"الطلاق"},
+                      {"التحريم"},
+                      {"الملك"},
+                      {"القلم"},
+                      {"الحاقة"},
+                      {"المعارج"},
+                      {"نوح"},
+                      {"الجن"},
+                      {"المزمل"},
+                      {"المدثر"},
+                      {"القيامة"},
+                      {"الإنسان", "الدهر"},
+                      {"المرسلات"},
+                      {"النبأ"},
+                      {"النازعات"},
+                      {"عبس"},
+                      {"التكوير"},
+                      {"الانفطار"},
+                      {"المطففين"},
+                      {"الانشقاق"},
+                      {"البروج"},
+                      {"الطارق"},
+                      {"الأعلى"},
+                      {"الغاشية"},
+                      {"الفجر"},
+                      {"البلد"},
+                      {"الشمس"},
+                      {"الليل"},
+                      {"الضحى"},
+                      {"الشرح", "الانشراح", "ألم نشرح"},
+                      {"التين"},
+                      {"العلق"},
+                      {"القدر"},
+                      {"البينة"},
+                      {"الزلزلة"},
+                      {"العاديات"},
+                      {"القارعة"},
+                      {"التكاثر"},
+                      {"العصر"},
+                      {"الهمزة"},
+                      {"الفيل"},
+                      {"قريش"},
+                      {"الماعون"},
+                      {"الكوثر"},
+                      {"الكافرون"},
+                      {"النصر"},
+                      {"المسد", "تبت"},
+                      {"الإخلاص", "قل هو الله أحد"},
+                      {"الفلق"},
+                      {"الناس"}
+              };
+
+              static class Alias {
+                  int surah;
+                  String[] toks;
+                  boolean shortAlias;
+              }
+
+              static final List<Alias> ALIASES = new ArrayList<>();
+
+              static {
+                  for (int i = 0; i < SURAHS.length; i++) {
+                      for (String a : SURAHS[i]) {
+                          List<String> t = prep(norm(a));
+                          Alias al = new Alias();
+                          al.surah = i + 1;
+                          al.toks = t.toArray(new String[0]);
+                          al.shortAlias = al.toks.length == 1 && al.toks[0].length() <= 2;
+                          ALIASES.add(al);
+                      }
+                  }
+              }
+
+              static boolean otherTokensIgnorable(List<String> toks, int skipIndex) {
+                  for (int j = 0; j < toks.size(); j++) {
+                      if (j == skipIndex) continue;
+                      String t = toks.get(j);
+                      if (!isDigits(t) && !t.equals("سوره")) return false;
+                  }
+                  return true;
+              }
+
+              static int quranIndex(List<String> toks) {
+                  int bestPos = Integer.MAX_VALUE;
+                  int best = -1;
+                  int bestLen = 0;
+                  for (Alias a : ALIASES) {
+                      int len = a.toks.length;
+                      for (int i = 0; i + len <= toks.size(); i++) {
+                          boolean ok = true;
+                          for (int j = 0; j < len; j++) {
+                              if (!toks.get(i + j).equals(a.toks[j])) {
+                                  ok = false;
+                                  break;
+                              }
+                          }
+                          if (!ok) continue;
+                          if (a.shortAlias) {
+                              boolean afterSurah = i > 0 && toks.get(i - 1).equals("سوره");
+                              if (!afterSurah && !otherTokensIgnorable(toks, i)) continue;
+                          }
+                          if (i < bestPos || (i == bestPos && len > bestLen)) {
+                              bestPos = i;
+                              best = a.surah;
+                              bestLen = len;
+                          }
+                          break;
+                      }
+                  }
+                  return best;
+              }
+
+              // ================= الترتيب =================
+
+              public static Result sort(List<MainActivity.Item> group) {
+                  Result res = new Result();
+                  List<Info> infos = new ArrayList<>();
+                  for (MainActivity.Item it : group) {
+                      Info f = new Info();
+                      f.item = it;
+                      String base = it.dir ? it.name : stripExt(it.name);
+                      f.toks = prep(norm(base));
+                      f.key = join(f.toks, 0, f.toks.size());
+                      f.quran = quranIndex(f.toks);
+                      f.digits = digitNumber(f.toks);
+                      f.word = (f.digits < 0) ? wordNumber(f.toks) : -1;
+                      infos.add(f);
+                  }
+
+                  int n = infos.size();
+                  Set<Integer> distinct = new HashSet<>();
+                  int wordCount = 0;
+                  for (Info f : infos) {
+                      if (f.quran > 0) distinct.add(f.quran);
+                      if (f.word > 0) wordCount++;
+                  }
+                  final boolean quranMode = n >= 2 && distinct.size() * 10 >= n * 6;
+                  boolean useWords = wordCount >= 2;
+
+                  boolean anyNumber = false;
+                  for (Info f : infos) {
+                      if (f.digits >= 0) f.num = f.digits;
+                      else if (useWords && f.word > 0) f.num = f.word;
+                      else f.num = -1;
+                      if (f.num >= 0) anyNumber = true;
+                  }
+
+                  Collections.sort(infos, (a, b) -> {
+                      if (quranMode) {
+                          int ca = a.quran > 0 ? 0 : 1;
+                          int cb = b.quran > 0 ? 0 : 1;
+                          if (ca != cb) return ca - cb;
+                          if (ca == 0 && a.quran != b.quran) return a.quran < b.quran ? -1 : 1;
+                      }
+                      int na = a.num >= 0 ? 0 : 1;
+                      int nb = b.num >= 0 ? 0 : 1;
+                      if (na != nb) return na - nb;
+                      if (na == 0 && a.num != b.num) return a.num < b.num ? -1 : 1;
+                      int c = a.key.compareTo(b.key);
+                      if (c != 0) return c;
+                      return a.item.name.compareTo(b.item.name);
+                  });
+
+                  for (Info f : infos) res.items.add(f.item);
+                  if (quranMode) res.mode = MODE_QURAN;
+                  else if (anyNumber) res.mode = MODE_NUMBERS;
+                  else res.mode = MODE_ALPHA;
+                  return res;
+              }
+          }
+          EOF
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Build
+        run: gradle assembleDebug --no-daemon
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: OrderCopy-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Publish APK
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v3-${{ github.run_number }}
+          name: Murattib Card JOC ${{ github.run_number }}
+          files: app/build/outputs/apk/debug/app-debug.apk
