@@ -76,7 +76,7 @@ jobs:
                   minSdk 24
                   targetSdk 34
                   versionCode runNo
-                  versionName '3.1'
+                  versionName '3.2'
               }
               buildTypes {
                   release {
@@ -2637,54 +2637,58 @@ jobs:
               }
 
               private static final String TMP = "_ordertmp";
-              private static final String VERSION = "3.1";
+              private static final String VERSION = "3.2";
 
               private static final String INTRO_HEAD = "كيف يقرأ الراديو الكارت؟";
 
               private static final String INTRO =
                       "يعمل راديو جوك (JOC) بنظام FAT32، وهو يعرض الملفات 🎵\n"
-                              + "والمجلدات 📁\n"
-                              + "بحسب أقدمية دخولها إلى المجلد 📁\n"
+                              + "والمجلدات📁\n"
+                              + "بحسب أقدمية دخولها إلى المجلد📁\n"
                               + "أو إلى جذر الكارت، لا بحسب\n"
-                              + "اسم الملف 🎵   أو رقمه،\n"
+                              + "اسم الملف🎵   أو رقمه،\n"
                               + "ولا بحسب تاريخ تحميله من الإنترنت.";
 
               private static final String EXAMPLE =
-                      "مثال: إذا نقلتَ الملفات 🎵\n"
-                              + "إلى المجلد 📁   أو إلى جذر الكارت بهذا الترتيب:\n\n"
-                              + "03 - آل عمران 🎵   أولاً، ثم\n\n"
-                              + "01 - الفاتحة 🎵   ثانياً، ثم\n\n"
-                              + "02 - البقرة 🎵   ثالثاً\n\n"
+                      "مثال: إذا نقلتَ الملفات🎵\n"
+                              + "إلى المجلد📁\n"
+                              + "أو إلى جذر الكارت بهذا الترتيب:\n\n"
+                              + "03 - آل عمران🎵   أولاً، ثم\n\n"
+                              + "01 - الفاتحة🎵   ثانياً، ثم\n\n"
+                              + "02 - البقرة🎵   ثالثاً\n\n"
                               + "فسيشغّلها الراديو بالترتيب نفسه\n"
-                              + "(3، ثم 1، ثم 2)،\n"
+                              + "( 3 ، ثم 1 ، ثم 2 )،\n"
                               + "لا بترتيب أرقامها.";
 
               private static final String NOTES_HEAD = "ملاحظات هامة";
 
               private static final String[] NOTES = {
-                      "١) اجمع مجلدات 📁   الكارت كلها\n"
-                              + "في مجلد 📁   رئيسي واحد بدل تفريقها. فأندرويد يمنع اختيار الجذر، وما يبقى فيه لا يطاله الترتيب، ولن تصل إلى ترتيب موحّد إن اخترت المجلدات 📁   متفرقة. أما المجلد 📁   الواحد فيُعالَج كل المحتويات بضغطة واحدة،\n"
-                              + "وتبقى الملفات 🎵\n"
-                              + "داخل مجلداتها 📁.\n"
-                              + "مثال: أنشئ مجلداً 📁   باسم «محتوياتي» وانقل إليه مجلدات 📁   الكارت.",
+                      "١) اجمع مجلدات📁   الكارت كلها\n"
+                              + "في مجلد📁   رئيسي واحد بدل تفريقها. فأندرويد يمنع اختيار الجذر، وما يبقى فيه لا يطاله الترتيب، ولن تصل إلى ترتيب موحّد إن اخترت المجلدات📁   متفرقة. أما المجلد📁   الواحد فيُعالَج كل المحتويات بضغطة واحدة،\n"
+                              + "وتبقى الملفات🎵\n"
+                              + "داخل مجلداتها📁.\n"
+                              + "مثال: أنشئ مجلداً📁\n"
+                              + "باسم «محتوياتي»\n"
+                              + "وانقل إليه مجلدات📁   الكارت كلها.",
                       "٢) يشغّل MP3 فقط، بجودة لا تتجاوز 128kbps.",
-                      "٣) يبدأ بما يوجد خارج المجلدات 📁   من ملفات 🎵\n"
+                      "٣) يبدأ بما يوجد خارج المجلدات📁   من ملفات🎵\n"
                               + "ثم ما في داخلها. فلو كان:\n"
-                              + "المجلد 📁   01\n"
-                              + "والملف 🎵   الخارجي 02\n"
-                              + "جاء الملف 🎵   الخارجي أولاً.",
-                      "٤) قد ينقل أندرويد وويندوز الملفات 🎵   بغير ترتيبها فيضطرب الكارت ولو كان مرقَّماً، فأعد تشغيل التطبيق بعد كل نسخ أو نقل."
+                              + "المجلد📁   01\n"
+                              + "والملف🎵   الخارجي 02\n"
+                              + "جاء الملف🎵02  الخارجي أولاً.",
+                      "٤) قد ينقل أندرويد وويندوز الملفات🎵   بغير ترتيبها فيضطرب الكارت ولو كان مرقَّماً، فأعد تشغيل التطبيق بعد كل نسخ أو نقل."
               };
 
               private static final String HOW_HEAD = "كيف يرتّب التطبيق؟";
 
               private static final String HOW_INTRO =
-                      "يطّلع على أسماء الملفات 🎵\n"
-                              + "والمجلدات 📁،\n"
-                              + "ثم يعيد إدخالها إلى المجلد 📁   ذاته بالتسلسل المطلوب، فيتبدّل ترتيب دخولها ويسير الراديو على هديه. ويجري ذلك على الكارت وحده: بلا نسخ ولا مساحة إضافية، ولا يتبدّل اسم أو محتوى أو مكان أي شيء.\n"
-                              + "تأتي الملفات 🎵   أولاً\n"
-                              + "ثم المجلدات 📁،\n"
-                              + "ويشمل ذلك الفرعي منها على أي عمق. ويحدّد التطبيق لكل مجلد 📁   طريقته الخاصة، بحسب الأولويات الآتية:";
+                      "يطّلع على أسماء الملفات🎵\n"
+                              + "والمجلدات📁،\n"
+                              + "ثم يعيد إدخالها إلى المجلد📁\n"
+                              + "ذاته بالتسلسل المطلوب، فيتبدّل ترتيب دخولها ويسير الراديو على هديه. ويجري ذلك على الكارت وحده: بلا نسخ ولا مساحة إضافية، ولا يتبدّل اسم أو محتوى أو مكان أي شيء.\n"
+                              + "تأتي الملفات🎵   أولاً\n"
+                              + "ثم المجلدات📁،\n"
+                              + "ويشمل ذلك الفرعي منها على أي عمق. ويحدّد التطبيق لكل مجلد📁   طريقته الخاصة، بحسب الأولويات الآتية:";
 
               private static final String[] P_TITLES = {
                       "١) المصحف",
@@ -2694,25 +2698,47 @@ jobs:
               };
 
               private static final String[] P_BODIES = {
-                      "حين تكون أغلب الأسماء (٦٠٪ فأكثر) سوراً مختلفة، تُرتَّب من الفاتحة إلى الناس أينما وردت، مثل: الفاتحة 🎵، سورة البقرة 🎵، 3 آل عمران 🎵، براءة 🎵. ولا يؤثر في التعرّف التشكيل ولا الهمزات ولا الفرق بين (ة) و(ه) و(ى) و(ي). وتكرار السورة الواحدة (دروس متعددة لسورة واحدة) يُخرج المجلد 📁   من هذا النوع، فينتقل التطبيق إلى الأرقام.",
-                      "من 1 إلى 9999 بقيمتها لا بشكلها: 1 و01 و001 متساوية، و2 قبل 10. وتُعرَف الأرقام العربية (٢) والإنجليزية (2) والمختلطة، سواء جاءت في بداية الاسم أو وسطه أو نهايته، مثل: سورة 2 البقرة 🎵، الدرس 10. وإن تعددت الأرقام في الاسم فالمعتبر أولها.",
-                      "عند غياب الأرقام يلتقط التطبيق الأعداد المكتوبة بالحروف، عربية وإنجليزية، من الأولى حتى الثلاثمئة، مهما كان موضعها: الأولى، الثانية، التاسعة، الحادي عشر، الخامس والعشرون، One، Two، Twenty-one. مثل: الحلقة الأولى، الحلقة الثانية. ويُشترط ظهور اسمين منها على الأقل في المجلد 📁.",
+                      "حين تكون أغلب الأسماء (٦٠٪ فأكثر) سوراً مختلفة، تُرتَّب من الفاتحة إلى الناس أينما وردت، مثل: الفاتحة🎵 ، سورة البقرة🎵 ، 3 آل عمران🎵 ، براءة🎵 . ولا يؤثر في التعرّف التشكيل ولا الهمزات ولا الفرق بين (ة) و(ه) و(ى) و(ي). وتكرار السورة الواحدة (دروس متعددة لسورة واحدة) يُخرج المجلد📁   من هذا النوع، فينتقل التطبيق إلى الأرقام.",
+                      "من 0 إلى 9999 فأكثر، بقيمتها لا بشكلها: 0 و00 و000 متساوية، و1 و01 و001 متساوية، و2 قبل 10. وتُعرَف الأرقام العربية (٢) والإنجليزية (2) والمختلطة، سواء جاءت في بداية الاسم أو وسطه أو نهايته، مثل: سورة 2 البقرة🎵 ، الدرس 10. وإن تعددت الأرقام في الاسم فالمعتبر أولها. ولا يُعدّ رقماً ما يدل على الجودة أو الصيغة في الاسم، مثل MP3 و128kbps و70K. وإن وُجد اسم  «المقدمة»  أو  «مقدمة»  أو  «تمهيد»  \nأو  «افتتاحية»  وحده، مهما سبقته رموز مثل # أو *، فهو أول ما في المجلد📁.",
+                      "عند غياب الأرقام يلتقط التطبيق الأعداد المكتوبة بالحروف، عربية وإنجليزية، من الأولى حتى الثلاثمئة، مهما كان موضعها: الأولى، الثانية، التاسعة، الحادي عشر، الخامس والعشرون، One، Two، Twenty-one. مثل: الحلقة الأولى، الحلقة الثانية. ويُشترط ظهور اسمين منها على الأقل في المجلد📁.",
                       "وعند غياب كل ما سبق تُرتَّب الأسماء أبجدياً، مع تجاهل «ال» والهمزات والتشكيل، ويأتي ما بلا رقم بعد المرقّم."
               };
 
               private static final String USAGE_HEAD = "طريقة الاستخدام";
 
               private static final String USAGE_STEPS =
-                      "١) «اختر الكارت أو المجلد 📁»،\n"
-                              + "وحدّد المجلد 📁   الرئيسي\n"
-                              + "الذي جمعت فيه المجلدات 📁.\n"
+                      "١) «اختر الكارت أو المجلد📁»،\n"
+                              + "وحدّد المجلد📁   الرئيسي\n"
+                              + "الذي جمعت فيه المجلدات📁.\n"
                               + "٢) «فحص ومعاينة»، وراجع النتيجة.\n"
                               + "٣) «ابدأ إعادة الترتيب».\n"
-                              + "وإن انقطعت العملية فأعد تشغيلها على المجلد 📁   الذي بدأت به، فتُكمل من حيث وقفت.";
+                              + "وإن انقطعت العملية فأعد تشغيلها.";
 
               // سطر مختصر فوق الأزرار
               private static final String USAGE =
                       "اجمع مجلدات الكارت في مجلد رئيسي واحد، ثم اختره بزر «اختر الكارت أو المجلد»، ثم «فحص ومعاينة» وراجع الترتيب، ثم «ابدأ». (التفاصيل في «التعريف بالتطبيق» أدناه.)";
+
+              private static final String DURATION_INTRO =
+                      "اختر مجلد📁   الكارت، وسيقرأ التطبيق مدة كل ملف MP3 🎵   ويعرض الإجمالي بالساعات والدقائق،\n"
+                              + "مع تفصيل لكل مجلد📁   على أي عمق.";
+
+              private static final String SUB_A_HEAD = "أ) ملفات راديو جوك فقط";
+
+              private static final String SUB_A_Q = "ما الذي يظهر في الجدول؟";
+
+              private static final String SUB_A_BODY =
+                      "يقرأ التطبيق ملفات MP3 🎵   وحدها، والمجلدات📁   التي فيها هذه الملفات فقط، مهما كان عمقها.\n"
+                              + "ويتجاهل إظهار المجلد📁   الفارغ تماما ، والمجلد📁   الذي فيه غير MP3 كالفيديوهات والصور والكتب.\n"
+                              + "وإن كان المجلد📁    بلا MP3🎵   وتحته مجلد📁   فيه MP3 🎵،\n"
+                              + "ظهر الاثنان: الأول بلا أرقام.\n\n"
+                              + "ثم يمكنك عرض جدول بمحتويات الكارت: لكل مجلد📁   صف واحد، وعدد الأسهم قبل اسمه يساوي عدد المجلدات التي فوقه، ثم عدد الملفات🎵   ورقم أول ملف والوقت.\n\n"
+                              + "وإن فعّلت «تفاصيل الملفات» ظهر اسم كل ملف🎵   ورقم تشغيله ومدته.\n\n"
+                              + "ثم اطبع الجدول أو احفظه PDF. وأرقام التشغيل تتبع الترتيب الذي سيقرأ به الراديو الملفات🎵.";
+
+              private static final String SUB_B_HEAD = "ب) الفحص الشامل للكارت";
+
+              private static final String SUB_B_BODY =
+                      "يعرض كل ما على الكارت دون استثناء: الملفات🎵  ، والصور ، والفيديوهات ، والمستندات ، الخ... ، والمجلدات📁   مهما كان نوعها وعمقها";
 
               private Uri rootUri;
               private TextView tvRoot, tvStatus, tvLog;
@@ -2730,12 +2756,6 @@ jobs:
               static final int SOFT = 0xFFB9CFC4;
               static final int MINT = 0xFF7ED6A8;
               private static final int AMBER = 0xFFF2B35E;
-
-              private static final String DURATION_INFO =
-                      "اختر مجلد 📁   الكارت، وسيقرأ التطبيق مدة كل ملف 🎵   صوتي ويعرض الإجمالي بالساعات والدقائق، مع تفصيل لكل مجلد 📁   على أي عمق.\n"
-                              + "ثم يمكنك عرض جدول بمحتويات الكارت: لكل مجلد 📁   صف واحد، وعدد الأسهم قبل اسمه يساوي عدد المجلدات التي فوقه، ثم عدد الملفات 🎵   ورقم أول ملف والوقت.\n"
-                              + "وإن فعّلت «تفاصيل الملفات» ظهر اسم كل ملف 🎵   ورقم تشغيله ومدته.\n"
-                              + "ثم اطبع الجدول أو احفظه PDF. وأرقام التشغيل تتبع الترتيب الذي سيقرأ به الراديو الملفات 🎵.";
 
               private LinearLayout orderPanel;
               private LinearLayout durationPanel;
@@ -2869,7 +2889,18 @@ jobs:
 
                   LinearLayout c3 = card(pad, d);
                   c3.addView(text("حساب المدة والجدول", 20, GOLD, true));
-                  c3.addView(para(DURATION_INFO, pad / 2));
+                  c3.addView(para(DURATION_INTRO, pad / 2));
+                  TextView sa = text(SUB_A_HEAD, 18, MINT, true);
+                  sa.setPadding(0, pad, 0, 0);
+                  c3.addView(sa);
+                  TextView sq = text(SUB_A_Q, 16, AMBER, true);
+                  sq.setPadding(0, pad / 2, 0, 0);
+                  c3.addView(sq);
+                  c3.addView(para(SUB_A_BODY, pad / 4));
+                  TextView sbh = text(SUB_B_HEAD, 18, MINT, true);
+                  sbh.setPadding(0, pad, 0, 0);
+                  c3.addView(sbh);
+                  c3.addView(para(SUB_B_BODY, pad / 4));
                   TextView company = text("شركة هود للتكنولوجيا", 16, GOLD, true);
                   company.setGravity(Gravity.CENTER);
                   company.setPadding(0, pad, 0, 0);
@@ -2993,6 +3024,10 @@ jobs:
                   if (res != RESULT_OK || data == null || data.getData() == null) return;
                   if (req == 2) {
                       tool.onPicked(data.getData());
+                      return;
+                  }
+                  if (req == 3) {
+                      tool.onScanPicked(data.getData());
                       return;
                   }
                   rootUri = data.getData();
@@ -3376,7 +3411,75 @@ jobs:
               static final int CARDC = 0xFF174C3A;
               static final int LINEC = 0xFF2C6A54;
 
-              private static final String[] EXTS = {"mp3", "m4a", "wav", "ogg", "oga", "opus", "flac", "aac", "wma", "amr", "mka", "3gp"};
+              private static final String[] EXTS = {"mp3"};
+
+              // ---------------------------------------------------------------- الفحص الشامل
+              static final int T_MP3 = 0, T_AUDIO = 1, T_VIDEO = 2, T_IMAGE = 3, T_DOC = 4, T_OTHER = 5;
+              static final String[] T_ICON = {"🎵", "🎧", "🎬", "🖼", "📄", "📦"};
+              static final String[] T_NAME = {"MP3", "صوت بصيغة أخرى", "فيديو", "صور", "كتب ومستندات", "غير ذلك"};
+              private static final String[] AUDIO_X = {"m4a", "wav", "ogg", "oga", "opus", "flac", "aac", "wma", "amr", "mka", "aiff", "aif", "mid", "midi"};
+              private static final String[] VIDEO_X = {"mp4", "mkv", "avi", "mov", "wmv", "flv", "webm", "3gp", "mpg", "mpeg", "m4v", "ts", "m2ts", "vob"};
+              private static final String[] IMAGE_X = {"jpg", "jpeg", "png", "gif", "bmp", "webp", "heic", "heif", "tif", "tiff", "svg", "ico"};
+              private static final String[] DOC_X = {"pdf", "doc", "docx", "txt", "rtf", "epub", "odt", "ods", "odp", "xls", "xlsx", "ppt", "pptx", "csv", "html", "htm", "xml", "json", "md", "mobi", "azw3", "djvu", "chm"};
+
+              static class ScanFile {
+                  String name;
+                  String ext = "";
+                  int type;
+                  long size = -1;
+                  long ms = -1;
+                  int kbps = -1;
+              }
+
+              static class ScanFolder {
+                  String name;
+                  int depth;
+                  int serial;
+                  boolean empty;
+                  List<ScanFile> files = new ArrayList<>();
+              }
+
+              static class ScanData {
+                  String rootName = "";
+                  List<ScanFolder> rows = new ArrayList<>();
+                  int[] count = new int[6];
+                  long[] size = new long[6];
+                  long[] ms = new long[6];
+                  int warn;
+              }
+
+              static ScanData lastScan = null;
+
+              static boolean hasExt(String[] list, String e) {
+                  for (String x : list) {
+                      if (x.equals(e)) return true;
+                  }
+                  return false;
+              }
+
+              static String extOf(String name) {
+                  int dot = name.lastIndexOf('.');
+                  if (dot < 0 || dot == name.length() - 1) return "";
+                  return name.substring(dot + 1).toLowerCase(Locale.US);
+              }
+
+              static int typeOf(String name) {
+                  String e = extOf(name);
+                  if (e.equals("mp3")) return T_MP3;
+                  if (hasExt(AUDIO_X, e)) return T_AUDIO;
+                  if (hasExt(VIDEO_X, e)) return T_VIDEO;
+                  if (hasExt(IMAGE_X, e)) return T_IMAGE;
+                  if (hasExt(DOC_X, e)) return T_DOC;
+                  return T_OTHER;
+              }
+
+              // ما لا يناسب الراديو من الصوت: صيغة غير MP3 أو MP3 فوق 128 كيلوبت
+              static String warnOf(ScanFile f) {
+                  if (f.type == T_AUDIO) return "ليس MP3";
+                  if (f.type == T_MP3 && f.kbps > 128) return "أعلى من 128";
+                  return "";
+              }
+
 
               static class FileRec {
                   String name;
@@ -3441,7 +3544,8 @@ jobs:
               private final Handler ui;
               private final float d;
 
-              private Button btnPick, btnTable;
+              private Button btnPick, btnTable, btnScan, btnScanTable;
+              private LinearLayout scanBox;
               private TextView tvName, tvStatus, tvCount, tvWarn, tvDetailTitle;
               private TextView numH, numM;
               private ProgressBar prog;
@@ -3461,8 +3565,10 @@ jobs:
                   LinearLayout p = new LinearLayout(act);
                   p.setOrientation(LinearLayout.VERTICAL);
 
-                  btnPick = act.makeButton("اختر مجلد الكارت", v -> act.startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), 2));
+                  btnPick = act.makeButton("أ) ملفات راديو جوك فقط (اختر مجلد الكارت)", v -> act.startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), 2));
                   p.addView(btnPick);
+                  btnScan = act.makeButton("ب) الفحص الشامل للكارت (كل ما عليه)", v -> act.startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), 3), false);
+                  p.addView(btnScan);
 
                   tvName = act.text("لم يتم الاختيار", 15, SOFT, false);
                   p.addView(tvName);
@@ -3513,6 +3619,19 @@ jobs:
                   btnTable.setEnabled(false);
                   p.addView(btnTable);
 
+                  scanBox = new LinearLayout(act);
+                  scanBox.setOrientation(LinearLayout.VERTICAL);
+                  scanBox.setBackground(act.shape(CARDC, 16, 0));
+                  scanBox.setPadding(pad, pad, pad, pad);
+                  scanBox.setVisibility(View.GONE);
+                  LinearLayout.LayoutParams sbl = new LinearLayout.LayoutParams(-1, -2);
+                  sbl.topMargin = (int) (10 * d);
+                  p.addView(scanBox, sbl);
+
+                  btnScanTable = act.makeButton("عرض جدول الفحص الشامل وطباعته", v -> openScanTable());
+                  btnScanTable.setEnabled(false);
+                  p.addView(btnScanTable);
+
                   tvDetailTitle = act.text("التفصيل", 17, GOLD, true);
                   tvDetailTitle.setPadding(0, (int) (14 * d), 0, (int) (4 * d));
                   tvDetailTitle.setVisibility(View.GONE);
@@ -3542,7 +3661,16 @@ jobs:
 
               private void openTable() {
                   if (last == null) return;
-                  act.startActivity(new Intent(act, TableActivity.class));
+                  Intent i = new Intent(act, TableActivity.class);
+                  i.putExtra("scan", false);
+                  act.startActivity(i);
+              }
+
+              private void openScanTable() {
+                  if (lastScan == null) return;
+                  Intent i = new Intent(act, TableActivity.class);
+                  i.putExtra("scan", true);
+                  act.startActivity(i);
               }
 
               // ---------------------------------------------------------------- الحساب
@@ -3551,7 +3679,11 @@ jobs:
                   if (busy) return;
                   busy = true;
                   btnPick.setEnabled(false);
+                  btnScan.setEnabled(false);
                   btnTable.setEnabled(false);
+                  btnScanTable.setEnabled(false);
+                  scanBox.removeAllViews();
+                  scanBox.setVisibility(View.GONE);
                   totals.setVisibility(View.GONE);
                   tvWarn.setVisibility(View.GONE);
                   tvDetailTitle.setVisibility(View.GONE);
@@ -3696,6 +3828,7 @@ jobs:
                           busy = false;
                           prog.setVisibility(View.GONE);
                           btnPick.setEnabled(true);
+                          btnScan.setEnabled(true);
                           tvStatus.setText("خطأ: " + msg);
                       });
                   }
@@ -3715,9 +3848,10 @@ jobs:
                   busy = false;
                   prog.setVisibility(View.GONE);
                   btnPick.setEnabled(true);
+                  btnScan.setEnabled(true);
                   tvStatus.setText("");
                   if (cd.files == 0) {
-                      tvStatus.setText("مفيش ملفات صوتية في المجلد ده");
+                      tvStatus.setText("لا توجد ملفات MP3 في هذا المجلد");
                       return;
                   }
                   long mins = minutesOf(cd.totalMs);
@@ -3735,6 +3869,10 @@ jobs:
                       LinearLayout row = new LinearLayout(act);
                       row.setOrientation(LinearLayout.HORIZONTAL);
                       row.setPadding(0, (int) (10 * d), 0, (int) (10 * d));
+                      if (fr.depth == 0) {
+                          row.setBackground(act.shape(0xFF1F5A46, 10, 0));
+                          row.setPadding((int) (8 * d), (int) (10 * d), (int) (8 * d), (int) (10 * d));
+                      }
 
                       if (fr.depth > 0) {
                           StringBuilder arrows = new StringBuilder();
@@ -3747,11 +3885,12 @@ jobs:
 
                       SpannableStringBuilder sb = new SpannableStringBuilder();
                       sb.append(fr.name);
-                      sb.setSpan(new StyleSpan(fr.depth == 0 ? Typeface.BOLD : Typeface.ITALIC), 0, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                      int style = fr.depth == 0 ? Typeface.BOLD : (fr.depth == 1 ? Typeface.BOLD_ITALIC : Typeface.ITALIC);
+                      sb.setSpan(new StyleSpan(style), 0, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                       if (!fr.files.isEmpty()) {
                           sb.append("  (" + MainActivity.ar(String.valueOf(fr.files.size())) + ")");
                       }
-                      TextView nm = act.text("", 15, CREAM, false);
+                      TextView nm = act.text("", fr.depth == 0 ? 18 : 15, fr.depth == 0 ? GOLD : CREAM, false);
                       nm.setText(sb);
                       row.addView(nm, new LinearLayout.LayoutParams(0, -2, 1f));
                       if (!fr.files.isEmpty()) {
@@ -3765,6 +3904,184 @@ jobs:
                   }
                   tvDetailTitle.setVisibility(View.VISIBLE);
                   btnTable.setEnabled(true);
+              }
+
+              // ---------------------------------------------------------------- الفحص الشامل
+
+              void onScanPicked(final Uri uri) {
+                  if (busy) return;
+                  busy = true;
+                  btnPick.setEnabled(false);
+                  btnScan.setEnabled(false);
+                  btnTable.setEnabled(false);
+                  btnScanTable.setEnabled(false);
+                  totals.setVisibility(View.GONE);
+                  tvWarn.setVisibility(View.GONE);
+                  tvDetailTitle.setVisibility(View.GONE);
+                  detailsList.removeAllViews();
+                  scanBox.removeAllViews();
+                  scanBox.setVisibility(View.GONE);
+                  prog.setVisibility(View.VISIBLE);
+                  tvStatus.setText("جاري فحص كل ما على الكارت...");
+                  new Thread(() -> scanCompute(uri)).start();
+              }
+
+              private void scanWalk(DocumentFile dir, String name, int depth, List<ScanFolder> rows, int[] serial,
+                                    List<ScanFile> recs, List<DocumentFile> docs) {
+                  ScanFolder sf = new ScanFolder();
+                  sf.name = name;
+                  sf.depth = depth;
+                  if (depth == 0) sf.serial = ++serial[0];
+                  rows.add(sf);
+                  MainActivity.Ordered o = act.order(dir);
+                  if (o.items.isEmpty()) sf.empty = true;
+                  for (MainActivity.Item it : o.items) {
+                      if (it.dir) {
+                          scanWalk(it.file, it.name, depth + 1, rows, serial, recs, docs);
+                      } else {
+                          ScanFile f = new ScanFile();
+                          f.name = it.name;
+                          f.ext = extOf(it.name);
+                          f.type = typeOf(it.name);
+                          sf.files.add(f);
+                          recs.add(f);
+                          docs.add(it.file);
+                      }
+                  }
+              }
+
+              private void probe(ScanFile f, DocumentFile doc) {
+                  try {
+                      f.size = doc.length();
+                  } catch (Exception e) {
+                      f.size = -1;
+                  }
+                  if (f.type != T_MP3 && f.type != T_AUDIO && f.type != T_VIDEO) return;
+                  MediaMetadataRetriever r = new MediaMetadataRetriever();
+                  try {
+                      r.setDataSource(act, doc.getUri());
+                      String v = r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                      if (v != null) f.ms = Long.parseLong(v);
+                      String b = r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
+                      if (b != null && f.type != T_VIDEO) f.kbps = (int) Math.round(Long.parseLong(b) / 1000.0);
+                  } catch (Exception ignored) {
+                  } finally {
+                      try {
+                          r.release();
+                      } catch (Exception ignored) {
+                      }
+                  }
+              }
+
+              private void scanCompute(Uri uri) {
+                  try {
+                      DocumentFile root = DocumentFile.fromTreeUri(act, uri);
+                      final String rootName = (root != null && root.getName() != null) ? root.getName() : "";
+                      ui.post(() -> tvName.setText("المختار: " + rootName));
+
+                      final ScanData sd = new ScanData();
+                      sd.rootName = rootName;
+                      final List<ScanFile> recs = new ArrayList<>();
+                      final List<DocumentFile> docs = new ArrayList<>();
+                      int[] serial = new int[]{0};
+
+                      MainActivity.Ordered top = act.order(root);
+                      ScanFolder loose = null;
+                      for (MainActivity.Item it : top.items) {
+                          if (!it.dir) {
+                              if (loose == null) {
+                                  loose = new ScanFolder();
+                                  loose.name = "ملفات خارج المجلدات";
+                                  loose.depth = 0;
+                                  loose.serial = ++serial[0];
+                                  sd.rows.add(loose);
+                              }
+                              ScanFile f = new ScanFile();
+                              f.name = it.name;
+                              f.ext = extOf(it.name);
+                              f.type = typeOf(it.name);
+                              loose.files.add(f);
+                              recs.add(f);
+                              docs.add(it.file);
+                          } else {
+                              scanWalk(it.file, it.name, 0, sd.rows, serial, recs, docs);
+                          }
+                      }
+
+                      final int n = recs.size();
+                      final AtomicInteger done = new AtomicInteger(0);
+                      ExecutorService pool = Executors.newFixedThreadPool(4);
+                      for (int i = 0; i < n; i++) {
+                          final int idx = i;
+                          pool.execute(() -> {
+                              probe(recs.get(idx), docs.get(idx));
+                              final int dn = done.incrementAndGet();
+                              if (dn % 10 == 0 || dn == n) {
+                                  ui.post(() -> tvStatus.setText(MainActivity.ar(dn + " / " + n)));
+                              }
+                          });
+                      }
+                      pool.shutdown();
+                      pool.awaitTermination(3, TimeUnit.HOURS);
+
+                      for (ScanFile f : recs) {
+                          sd.count[f.type]++;
+                          if (f.size > 0) sd.size[f.type] += f.size;
+                          if (f.ms > 0) sd.ms[f.type] += f.ms;
+                          if (warnOf(f).length() > 0) sd.warn++;
+                      }
+                      lastScan = sd;
+                      ui.post(() -> showScan(sd));
+                  } catch (Exception e) {
+                      final String msg = String.valueOf(e.getMessage());
+                      ui.post(() -> {
+                          busy = false;
+                          prog.setVisibility(View.GONE);
+                          btnPick.setEnabled(true);
+                          btnScan.setEnabled(true);
+                          tvStatus.setText("خطأ: " + msg);
+                      });
+                  }
+              }
+
+              static String fmtSize(long b) {
+                  if (b < 0) return "—";
+                  if (b < 1024) return b + " B";
+                  if (b < 1024L * 1024) return String.format(Locale.US, "%.0f KB", b / 1024.0);
+                  if (b < 1024L * 1024 * 1024) return String.format(Locale.US, "%.1f MB", b / (1024.0 * 1024));
+                  return String.format(Locale.US, "%.2f GB", b / (1024.0 * 1024 * 1024));
+              }
+
+              private void showScan(ScanData sd) {
+                  busy = false;
+                  prog.setVisibility(View.GONE);
+                  btnPick.setEnabled(true);
+                  btnScan.setEnabled(true);
+                  tvStatus.setText("");
+                  int total = 0;
+                  for (int c : sd.count) total += c;
+                  if (total == 0) {
+                      tvStatus.setText("لا توجد ملفات في هذا المجلد");
+                      return;
+                  }
+                  scanBox.removeAllViews();
+                  TextView head = act.text("ملخص الكارت", 16, GOLD, true);
+                  head.setGravity(Gravity.CENTER);
+                  scanBox.addView(head, new LinearLayout.LayoutParams(-1, -2));
+                  for (int t = 0; t < 6; t++) {
+                      if (sd.count[t] == 0) continue;
+                      String line = T_ICON[t] + "  " + T_NAME[t] + ": " + sd.count[t] + " ملف  |  " + fmtSize(sd.size[t]);
+                      if ((t == T_MP3 || t == T_AUDIO || t == T_VIDEO) && sd.ms[t] > 0) line += "  |  " + timeWords(sd.ms[t]);
+                      TextView tv = act.text(MainActivity.ar(line), 14, CREAM, false);
+                      tv.setPadding(0, (int) (6 * d), 0, 0);
+                      scanBox.addView(tv, new LinearLayout.LayoutParams(-1, -2));
+                  }
+                  scanBox.setVisibility(View.VISIBLE);
+                  if (sd.warn > 0) {
+                      tvWarn.setText(MainActivity.ar(String.valueOf(sd.warn)) + " ملفاً صوتياً لا يناسب الراديو (ليس MP3 أو يتجاوز 128 كيلوبت)");
+                      tvWarn.setVisibility(View.VISIBLE);
+                  }
+                  btnScanTable.setEnabled(true);
               }
           }
           EOF
@@ -3791,10 +4108,25 @@ jobs:
                   return rest.isEmpty() ? n : rest;
               }
 
-              // الوقت بالكلمات (ساعة ودقيقة) بلا ثوانٍ
-              static String hm(long ms) {
+              static String stripExt(String name) {
+                  int dot = name.lastIndexOf('.');
+                  return (dot > 0 && name.length() - dot <= 6) ? name.substring(0, dot) : name;
+              }
+
+              static String two(long v) {
+                  return String.format(Locale.US, "%02d", v);
+              }
+
+              // الوقت بخانتين: الساعات يساراً (مظلّلة) والدقائق يميناً، بلا ثوانٍ
+              static String timeInner(long ms) {
                   if (ms < 0) return "—";
-                  return esc(DurationTool.timeWords(ms));
+                  long m = DurationTool.minutesOf(ms);
+                  return "<div class='tt'><span class='hh'>" + two(m / 60) + "</span><span class='cl'>&nbsp;:&nbsp;</span><span class='mm'>"
+                          + two(m % 60) + "</span></div>";
+              }
+
+              static String timeHead() {
+                  return "<div class='tt'><span class='h0'>ساعات</span><span class='cl'>&nbsp;:&nbsp;</span><span class='m0'>دقائق</span></div>";
               }
 
               // عدد الأسهم يساوي عدد المجلدات التي فوق هذا المجلد
@@ -3806,95 +4138,123 @@ jobs:
                   return s.toString();
               }
 
-              static String build(DurationTool.CardData cd, boolean details, int cols, boolean landscape) {
-                  int width = landscape ? 1040 : 730;
+              static String foldersText(int n) {
+                  if (n == 1) return "مجلد واحد";
+                  if (n == 2) return "مجلدان";
+                  if (n >= 3 && n <= 10) return n + " مجلدات";
+                  return n + " مجلداً";
+              }
+
+              static String rowClass(int depth) {
+                  return depth == 0 ? "d0 blk" : (depth == 1 ? "d1" : "dn");
+              }
+
+              static String head(String title, String sub, int width, int fontPx, boolean small) {
                   StringBuilder h = new StringBuilder();
                   h.append("<!DOCTYPE html><html dir='rtl' lang='ar'><head><meta charset='utf-8'>");
                   h.append("<meta name='viewport' content='width=").append(width + 30).append("'>");
                   h.append("<style>");
                   h.append("body{font-family:sans-serif;margin:0;padding:8px 10px;color:#111;background:#fff;width:").append(width).append("px}");
                   h.append("h1{font-size:18px;text-align:center;margin:4px 0 10px}");
-                  h.append("table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:").append(details ? 11 : 14).append("px}");
-                  h.append("th,td{border:1px solid #444;padding:4px 3px;text-align:center;word-wrap:break-word}th{overflow-wrap:normal;word-break:keep-all}");
-                  h.append("th{background:#0F3D2E;color:#F5E6A8;font-weight:bold;-webkit-print-color-adjust:exact}");
+                  h.append("h2{font-size:15px;margin:12px 0 6px}");
+                  h.append("table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:").append(fontPx).append("px;margin-bottom:10px}");
+                  h.append("th,td{border:1px solid #444;padding:4px 3px;text-align:center;word-wrap:break-word}");
+                  h.append("th{background:#0F3D2E;color:#F5E6A8;font-weight:bold;overflow-wrap:normal;word-break:keep-all;-webkit-print-color-adjust:exact}");
                   h.append("thead{display:table-header-group}tr{page-break-inside:avoid}");
                   h.append("tr.blk td{border-top:2px solid #000}");
                   h.append("tr.fb td{border-top:1.5px solid #666}");
-                  h.append("td.tot{background:#EFEBDD;font-weight:bold;-webkit-print-color-adjust:exact}");
-                  h.append("td.nm{text-align:start}td.main{font-weight:bold}td.sub{font-style:italic}td[rowspan]{vertical-align:top}");
+                  h.append("tr.d0 td.nm{font-weight:bold;font-size:1.12em;background:#E3EEE8;-webkit-print-color-adjust:exact}");
+                  h.append("tr.d1 td.nm{font-weight:bold;font-style:italic}");
+                  h.append("tr.dn td.nm{font-style:italic}");
+                  h.append("td.nm{text-align:start}td[rowspan]{vertical-align:top}");
+                  h.append("tr.tot td{border-top:3px double #000;background:#EFEBDD;font-weight:bold;-webkit-print-color-adjust:exact}");
+                  h.append("tr.warn td,td.w{background:#FBE3E0;-webkit-print-color-adjust:exact}");
                   h.append(".ar{direction:ltr;unicode-bidi:isolate;font-weight:bold;font-style:normal;color:#8A6D12;margin-left:5px;-webkit-print-color-adjust:exact}");
-                  h.append("");
+                  h.append(".tt{display:flex;direction:ltr;justify-content:center;align-items:center}");
+                  int w = small ? 30 : 46;
+                  h.append(".hh,.mm,.h0,.m0{display:inline-block;width:").append(w).append("px;text-align:center}");
+                  h.append(".hh{background:#DDDDDD;font-weight:bold;-webkit-print-color-adjust:exact}");
+                  h.append(".cl{display:inline-block;text-align:center;white-space:nowrap}");
+                  if (small) h.append(".h0,.m0{font-size:10px}");
                   h.append(".note{font-size:11px;color:#555;margin-top:6px}");
                   h.append("</style></head><body>");
-                  h.append("<h1>جدول محتويات الكارت");
-                  if (cd.rootName != null && cd.rootName.length() > 0) h.append(" — ").append(esc(cd.rootName));
+                  h.append("<h1>").append(esc(title));
+                  if (sub != null && sub.length() > 0) h.append(" — ").append(esc(sub));
                   h.append("</h1>");
+                  return h.toString();
+              }
 
-                  if (!details) {
-                      buildSimple(h, cd);
-                  } else {
-                      buildDetails(h, cd, cols);
-                  }
-                  if (cd.bad > 0) {
-                      h.append("<div class='note'>— ملف لم تُحسب مدته ولم يدخل في الإجمالي</div>");
-                  }
+              // ------------------------------------------------------------ جدول ملفات راديو جوك
+
+              static String build(DurationTool.CardData cd, boolean details, int cols, boolean landscape) {
+                  int width = landscape ? 1040 : 730;
+                  StringBuilder h = new StringBuilder(head("جدول محتويات الكارت", cd.rootName, width, details ? 11 : 14, details));
+                  if (!details) buildSimple(h, cd);
+                  else buildDetails(h, cd, cols);
+                  if (cd.bad > 0) h.append("<div class='note'>— ملف لم تُحسب مدته ولم يدخل في الإجمالي</div>");
                   h.append("</body></html>");
                   return h.toString();
+              }
+
+              private static void totalRow(StringBuilder h, DurationTool.CardData cd, int fileCols) {
+                  h.append("<tr class='tot'><td>المجموع</td><td>").append(foldersText(cd.rows.size())).append("</td>");
+                  h.append("<td>").append(cd.files).append("</td><td></td>");
+                  h.append("<td").append(fileCols > 0 ? " colspan='" + fileCols + "'" : "").append(">");
+                  if (fileCols > 0) h.append("الوقت: ");
+                  h.append(timeInner(cd.totalMs)).append("</td></tr>");
               }
 
               private static void buildSimple(StringBuilder h, DurationTool.CardData cd) {
                   h.append("<table><colgroup><col style='width:7%'><col style='width:37%'><col style='width:12%'>");
                   h.append("<col style='width:14%'><col style='width:30%'></colgroup>");
                   h.append("<thead><tr><th>المسلسل</th><th>المجلد</th><th>عدد الملفات</th>");
-                  h.append("<th>تبدأ من الرقم</th><th>الوقت</th></tr></thead><tbody>");
+                  h.append("<th>تبدأ من الرقم</th><th>").append(timeHead()).append("</th></tr></thead><tbody>");
                   for (DurationTool.FolderRec fr : cd.rows) {
-                      boolean main = fr.depth == 0;
-                      h.append("<tr").append(main ? " class='blk'" : "").append(">");
-                      h.append("<td>").append(main ? String.valueOf(fr.serial) : "").append("</td>");
-                      h.append("<td class='nm ").append(main ? "main" : "sub").append("'>");
-                      h.append(arrows(fr.depth)).append(esc(fr.name)).append("</td>");
+                      h.append("<tr class='").append(rowClass(fr.depth)).append("'>");
+                      h.append("<td>").append(fr.depth == 0 ? String.valueOf(fr.serial) : "").append("</td>");
+                      h.append("<td class='nm'>").append(arrows(fr.depth)).append(esc(fr.name)).append("</td>");
                       if (fr.files.isEmpty()) {
                           h.append("<td></td><td></td><td></td>");
                       } else {
                           h.append("<td>").append(fr.files.size()).append("</td>");
                           h.append("<td>").append(fr.start).append("</td>");
-                          h.append("<td>").append(hm(fr.totalMs)).append("</td>");
+                          h.append("<td>").append(timeInner(fr.totalMs)).append("</td>");
                       }
                       h.append("</tr>");
                   }
+                  totalRow(h, cd, 0);
                   h.append("</tbody></table>");
               }
 
               private static void buildDetails(StringBuilder h, DurationTool.CardData cd, int cols) {
                   double rest = 64.0 / cols;
-                  h.append("<table><colgroup><col style='width:4%'><col style='width:20%'>");
+                  h.append("<table><colgroup><col style='width:6%'><col style='width:18%'>");
                   h.append("<col style='width:6%'><col style='width:6%'>");
                   for (int c = 0; c < cols; c++) {
-                      h.append("<col style='width:").append(String.format(Locale.US, "%.2f", rest * 0.38)).append("%'>");
-                      h.append("<col style='width:").append(String.format(Locale.US, "%.2f", rest * 0.26)).append("%'>");
-                      h.append("<col style='width:").append(String.format(Locale.US, "%.2f", rest * 0.36)).append("%'>");
+                      h.append("<col style='width:").append(String.format(Locale.US, "%.2f", rest * 0.34)).append("%'>");
+                      h.append("<col style='width:").append(String.format(Locale.US, "%.2f", rest * 0.22)).append("%'>");
+                      h.append("<col style='width:").append(String.format(Locale.US, "%.2f", rest * 0.44)).append("%'>");
                   }
                   h.append("</colgroup><thead><tr>");
                   h.append("<th rowspan='2'>م</th><th rowspan='2'>المجلد</th>");
                   h.append("<th rowspan='2'>عدد الملفات</th><th rowspan='2'>تبدأ من</th>");
                   h.append("<th colspan='").append(3 * cols).append("'>تفاصيل الملفات</th></tr><tr>");
                   for (int c = 0; c < cols; c++) {
-                      h.append("<th>اسم الملف</th><th>رقم التشغيل</th><th>الوقت</th>");
+                      h.append("<th>اسم الملف</th><th>رقم التشغيل</th><th>").append(timeHead()).append("</th>");
                   }
                   h.append("</tr></thead><tbody>");
 
                   for (DurationTool.FolderRec fr : cd.rows) {
-                      boolean main = fr.depth == 0;
                       int cnt = fr.files.size();
                       int rowsN = (int) Math.ceil(cnt / (double) cols);
                       int span = Math.max(1, rowsN);
                       for (int r = 0; r < span; r++) {
                           h.append("<tr");
-                          if (r == 0) h.append(" class='").append(main ? "blk" : "fb").append("'");
+                          if (r == 0) h.append(" class='").append(rowClass(fr.depth)).append("'");
                           h.append(">");
                           if (r == 0) {
-                              h.append("<td rowspan='").append(span).append("'>").append(main ? String.valueOf(fr.serial) : "").append("</td>");
-                              h.append("<td rowspan='").append(span).append("' class='nm ").append(main ? "main" : "sub").append("'>");
+                              h.append("<td rowspan='").append(span).append("'>").append(fr.depth == 0 ? String.valueOf(fr.serial) : "").append("</td>");
+                              h.append("<td rowspan='").append(span).append("' class='nm'>");
                               h.append(arrows(fr.depth)).append(esc(fr.name)).append("</td>");
                               h.append("<td rowspan='").append(span).append("'>").append(cnt > 0 ? String.valueOf(cnt) : "").append("</td>");
                               h.append("<td rowspan='").append(span).append("'>").append(cnt > 0 ? String.valueOf(fr.start) : "").append("</td>");
@@ -3905,10 +4265,122 @@ jobs:
                                   DurationTool.FileRec f = fr.files.get(idx);
                                   h.append("<td>").append(esc(clean(f.name))).append("</td>");
                                   h.append("<td>").append(f.number).append("</td>");
-                                  h.append("<td>").append(hm(f.ms)).append("</td>");
+                                  h.append("<td>").append(timeInner(f.ms)).append("</td>");
                               } else {
                                   h.append("<td></td><td></td><td></td>");
                               }
+                          }
+                          h.append("</tr>");
+                      }
+                  }
+                  totalRow(h, cd, 3 * cols);
+                  h.append("</tbody></table>");
+              }
+
+              // ------------------------------------------------------------ جدول الفحص الشامل
+
+              static boolean isTimed(int t) {
+                  return t == DurationTool.T_MP3 || t == DurationTool.T_AUDIO || t == DurationTool.T_VIDEO;
+              }
+
+              static String typeLabel(int t) {
+                  return DurationTool.T_ICON[t] + " " + DurationTool.T_NAME[t];
+              }
+
+              static String buildScan(DurationTool.ScanData sd, boolean details, boolean landscape) {
+                  int width = landscape ? 1040 : 730;
+                  StringBuilder h = new StringBuilder(head("الفحص الشامل للكارت", sd.rootName, width, details ? 11 : 13, true));
+
+                  // ملخص الأنواع
+                  h.append("<h2>ملخص ما على الكارت</h2>");
+                  h.append("<table><colgroup><col style='width:34%'><col style='width:14%'><col style='width:20%'><col style='width:32%'></colgroup>");
+                  h.append("<thead><tr><th>النوع</th><th>العدد</th><th>الحجم</th><th>").append(timeHead()).append("</th></tr></thead><tbody>");
+                  int allCount = 0;
+                  long allSize = 0, allMs = 0;
+                  for (int t = 0; t < 6; t++) {
+                      if (sd.count[t] == 0) continue;
+                      allCount += sd.count[t];
+                      allSize += sd.size[t];
+                      h.append("<tr").append(t == DurationTool.T_AUDIO ? " class='warn'" : "").append("><td class='nm'>").append(typeLabel(t)).append("</td>");
+                      h.append("<td>").append(sd.count[t]).append("</td><td>").append(DurationTool.fmtSize(sd.size[t])).append("</td>");
+                      if (isTimed(t)) {
+                          allMs += sd.ms[t];
+                          h.append("<td>").append(timeInner(sd.ms[t])).append("</td>");
+                      } else {
+                          h.append("<td></td>");
+                      }
+                      h.append("</tr>");
+                  }
+                  h.append("<tr class='tot'><td>الإجمالي</td><td>").append(allCount).append("</td><td>").append(DurationTool.fmtSize(allSize));
+                  h.append("</td><td>").append(timeInner(allMs)).append("</td></tr></tbody></table>");
+                  if (sd.warn > 0) {
+                      h.append("<div class='note'>").append(sd.warn).append(" ملفاً صوتياً لا يناسب الراديو (ليس MP3 أو يتجاوز 128 كيلوبت) وهو مظلّل بالأحمر في التفصيل</div>");
+                  }
+
+                  h.append("<h2>").append(details ? "تفاصيل كل ملف" : "محتوى كل مجلد").append("</h2>");
+                  if (!details) buildScanSimple(h, sd);
+                  else buildScanDetails(h, sd);
+                  h.append("</body></html>");
+                  return h.toString();
+              }
+
+              private static void buildScanSimple(StringBuilder h, DurationTool.ScanData sd) {
+                  h.append("<table><colgroup><col style='width:5%'><col style='width:27%'>");
+                  for (int t = 0; t < 6; t++) h.append("<col style='width:6%'>");
+                  h.append("<col style='width:10%'><col style='width:22%'></colgroup>");
+                  h.append("<thead><tr><th>م</th><th>المجلد</th>");
+                  for (int t = 0; t < 6; t++) h.append("<th>").append(DurationTool.T_ICON[t]).append("<br>").append(esc(DurationTool.T_NAME[t])).append("</th>");
+                  h.append("<th>الحجم</th><th>").append(timeHead()).append("</th></tr></thead><tbody>");
+                  for (DurationTool.ScanFolder sf : sd.rows) {
+                      h.append("<tr class='").append(rowClass(sf.depth)).append("'>");
+                      h.append("<td>").append(sf.depth == 0 ? String.valueOf(sf.serial) : "").append("</td>");
+                      h.append("<td class='nm'>").append(arrows(sf.depth)).append(esc(sf.name)).append("</td>");
+                      if (sf.files.isEmpty()) {
+                          h.append("<td colspan='8'>").append(sf.empty ? "فارغ" : "").append("</td>");
+                      } else {
+                          int[] c = new int[6];
+                          long size = 0, ms = 0;
+                          for (DurationTool.ScanFile f : sf.files) {
+                              c[f.type]++;
+                              if (f.size > 0) size += f.size;
+                              if (f.ms > 0 && isTimed(f.type)) ms += f.ms;
+                          }
+                          for (int t = 0; t < 6; t++) h.append("<td>").append(c[t] == 0 ? "" : String.valueOf(c[t])).append("</td>");
+                          h.append("<td>").append(DurationTool.fmtSize(size)).append("</td><td>").append(ms > 0 ? timeInner(ms) : "").append("</td>");
+                      }
+                      h.append("</tr>");
+                  }
+                  h.append("</tbody></table>");
+              }
+
+              private static void buildScanDetails(StringBuilder h, DurationTool.ScanData sd) {
+                  h.append("<table><colgroup><col style='width:4%'><col style='width:17%'><col style='width:11%'><col style='width:26%'>");
+                  h.append("<col style='width:9%'><col style='width:18%'><col style='width:6%'><col style='width:9%'></colgroup>");
+                  h.append("<thead><tr><th>م</th><th>المجلد</th><th>النوع</th><th>اسم الملف</th><th>الحجم</th><th>")
+                          .append(timeHead()).append("</th><th>كيلوبت</th><th>تنبيه</th></tr></thead><tbody>");
+                  for (DurationTool.ScanFolder sf : sd.rows) {
+                      int cnt = sf.files.size();
+                      int span = Math.max(1, cnt);
+                      for (int r = 0; r < span; r++) {
+                          DurationTool.ScanFile f = cnt > 0 ? sf.files.get(r) : null;
+                          String w = f == null ? "" : DurationTool.warnOf(f);
+                          String wc = w.length() > 0 ? " class='w'" : "";
+                          h.append("<tr class='");
+                          if (r == 0) h.append(rowClass(sf.depth));
+                          h.append("'>");
+                          if (r == 0) {
+                              h.append("<td rowspan='").append(span).append("'>").append(sf.depth == 0 ? String.valueOf(sf.serial) : "").append("</td>");
+                              h.append("<td rowspan='").append(span).append("' class='nm'>").append(arrows(sf.depth)).append(esc(sf.name)).append("</td>");
+                          }
+                          if (f == null) {
+                              h.append("<td colspan='6'>").append(sf.empty ? "فارغ" : "").append("</td>");
+                          } else {
+                              h.append("<td").append(wc).append(" dir='ltr'>").append(DurationTool.T_ICON[f.type]).append(" ").append(esc(f.ext.toUpperCase(Locale.US))).append("</td>");
+                              h.append("<td").append(wc).append(" dir='auto'>").append(esc(stripExt(f.name))).append("</td>");
+                              h.append("<td").append(wc).append(" dir='ltr'>").append(DurationTool.fmtSize(f.size)).append("</td>");
+                              h.append("<td").append(wc).append(">").append(isTimed(f.type) && f.ms >= 0 ? timeInner(f.ms) : "").append("</td>");
+                              h.append("<td").append(wc).append(">").append(f.kbps > 0 ? String.valueOf(f.kbps) : "").append("</td>");
+                              h.append("<td").append(wc).append(">").append(esc(w)).append("</td>");
                           }
                           h.append("</tr>");
                       }
@@ -3943,6 +4415,7 @@ jobs:
 
               private WebView web;
               private boolean details = false;
+              private boolean scanMode = false;
               private boolean landscape = true;
               private int cols = 3;
               private Button bDetails, bCols, bOrient;
@@ -3952,7 +4425,8 @@ jobs:
               protected void onCreate(Bundle b) {
                   super.onCreate(b);
                   if (getActionBar() != null) getActionBar().hide();
-                  if (DurationTool.last == null) {
+                  scanMode = getIntent().getBooleanExtra("scan", false);
+                  if ((scanMode ? DurationTool.lastScan : DurationTool.last) == null) {
                       finish();
                       return;
                   }
@@ -3987,7 +4461,7 @@ jobs:
                   bDetails.setOnClickListener(v -> {
                       details = !details;
                       bDetails.setText(details ? "تفاصيل الملفات: تشغيل" : "تفاصيل الملفات: إيقاف");
-                      bCols.setEnabled(details);
+                      bCols.setEnabled(details && !scanMode);
                       reload();
                   });
                   bCols.setOnClickListener(v -> {
@@ -4047,7 +4521,9 @@ jobs:
               }
 
               private void reload() {
-                  String html = TableBuilder.build(DurationTool.last, details, cols, landscape);
+                  String html = scanMode
+                          ? TableBuilder.buildScan(DurationTool.lastScan, details, landscape)
+                          : TableBuilder.build(DurationTool.last, details, cols, landscape);
                   web.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
               }
 
@@ -4102,6 +4578,7 @@ jobs:
                   long num = -1;
                   List<Long> dlist = new ArrayList<>();
                   long[] seq = null;
+                  boolean intro = false;
               }
 
               // ================= التطبيع =================
@@ -4385,6 +4862,13 @@ jobs:
                   return TECH.matcher(s).replaceAll(" ");
               }
 
+              // اسم «مقدمة» أو «تمهيد» أو «افتتاحية» وحده (الرموز والتشكيل و«ال» لا تُعدّ كلاماً) يأتي أول المجلد
+              static boolean isIntroName(List<String> toks) {
+                  if (toks.size() != 1) return false;
+                  String t = toks.get(0);
+                  return t.equals("مقدمه") || t.equals("تمهيد") || t.equals("افتتاحيه");
+              }
+
               static List<Long> digitNumbers(List<String> toks) {
                   List<Long> out = new ArrayList<>();
                   for (String t : toks) {
@@ -4607,6 +5091,7 @@ jobs:
                       f.quran = quranIndex(f.toks);
                       f.dlist = digitNumbers(f.toks);
                       f.word = wordNumber(f.toks);
+                      f.intro = isIntroName(f.toks);
                       infos.add(f);
                   }
 
@@ -4650,6 +5135,7 @@ jobs:
                   }
 
                   Collections.sort(infos, (a, b) -> {
+                      if (a.intro != b.intro) return a.intro ? -1 : 1;
                       if (quranMode) {
                           int ca = a.quran > 0 ? 0 : 1;
                           int cb = b.quran > 0 ? 0 : 1;
@@ -4703,9 +5189,9 @@ jobs:
       - name: Publish APK
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v3.1-${{ github.run_number }}
-          name: "مُرتب كارت جوك 3.1 (${{ github.run_number }})"
+          tag_name: v3.2-${{ github.run_number }}
+          name: "مُرتب كارت جوك 3.2 (${{ github.run_number }})"
           body: |
-            تطبيق «مُرتب كارت جوك» من شركة هود للتكنولوجيا، الإصدار 3.1.
+            تطبيق «مُرتب كارت جوك» من شركة هود للتكنولوجيا، الإصدار 3.2.
             إن ظهرت رسالة «التطبيق لم يُثبَّت»: افتح إعدادات الهاتف ثم التطبيقات، واسمح لتطبيق الملفات أو المتصفح الذي نزّلت منه بتثبيت التطبيقات الخارجية، ثم أعد المحاولة.
           files: Murattib-Card-JOC.apk
